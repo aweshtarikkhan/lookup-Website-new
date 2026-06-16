@@ -1,0 +1,226 @@
+[
+  {
+    "id": 1,
+    "category": "digital-marketing",
+    "name": "Social Media Marketing",
+    "icon": "📱",
+    "description": "Strategic social media campaigns to boost your brand visibility and engagement across all platforms.",
+    "active": true
+  },
+  {
+    "id": 2,
+    "category": "digital-marketing",
+    "name": "WhatsApp Marketing",
+    "icon": "💬",
+    "description": "Targeted WhatsApp campaigns with bulk messaging, automation, and customer engagement strategies.",
+    "active": true
+  },
+  {
+    "id": 3,
+    "category": "digital-marketing",
+    "name": "Google Ads",
+    "icon": "🔍",
+    "description": "High-converting Google Ads campaigns with keyword research, ad copy optimization, and ROI tracking.",
+    "active": true
+  },
+  {
+    "id": 4,
+    "category": "digital-marketing",
+    "name": "Meta Ads",
+    "icon": "📊",
+    "description": "Facebook & Instagram advertising with precise targeting, creative ads, and performance optimization.",
+    "active": true
+  },
+  {
+    "id": 5,
+    "category": "digital-marketing",
+    "name": "SEO Optimization",
+    "icon": "🚀",
+    "description": "Comprehensive SEO strategies including on-page, off-page, technical SEO, and local SEO optimization.",
+    "active": true
+  },
+  {
+    "id": 6,
+    "category": "digital-marketing",
+    "name": "Email Marketing",
+    "icon": "📧",
+    "description": "Automated email campaigns with segmentation, A/B testing, and conversion-focused templates.",
+    "active": true
+  },
+  {
+    "id": 7,
+    "category": "digital-marketing",
+    "name": "Influencer Marketing",
+    "icon": "⭐",
+    "description": "Connect with the right influencers to amplify your brand reach and drive authentic engagement.",
+    "active": true
+  },
+  {
+    "id": 8,
+    "category": "digital-marketing",
+    "name": "Content Creation",
+    "icon": "✍️",
+    "description": "Engaging content strategy with blog posts, articles, social media content, and copywriting.",
+    "active": true
+  },
+  {
+    "id": 9,
+    "category": "digital-marketing",
+    "name": "Performance Marketing",
+    "icon": "📈",
+    "description": "Data-driven marketing campaigns focused on measurable results, conversions, and ROI maximization.",
+    "active": true
+  },
+  {
+    "id": 10,
+    "category": "digital-marketing",
+    "name": "Social Media Management",
+    "icon": "🎯",
+    "description": "End-to-end social media management including content planning, scheduling, and community management.",
+    "active": true
+  },
+  {
+    "id": 11,
+    "category": "creative-branding",
+    "name": "Video Shoot",
+    "icon": "🎬",
+    "description": "Professional video production with scripting, filming, and direction for promotional content.",
+    "active": true
+  },
+  {
+    "id": 12,
+    "category": "creative-branding",
+    "name": "Video Editing",
+    "icon": "🎞️",
+    "description": "High-quality video editing with motion graphics, color grading, and sound design.",
+    "active": true
+  },
+  {
+    "id": 13,
+    "category": "creative-branding",
+    "name": "Podcast Shoot",
+    "icon": "🎙️",
+    "description": "Professional podcast recording setup with multi-camera angles and studio-quality audio.",
+    "active": true
+  },
+  {
+    "id": 14,
+    "category": "creative-branding",
+    "name": "Podcast Editing",
+    "icon": "🎧",
+    "description": "Expert podcast editing with noise removal, mixing, mastering, and intro/outro production.",
+    "active": true
+  },
+  {
+    "id": 15,
+    "category": "creative-branding",
+    "name": "Post Creation",
+    "icon": "🎨",
+    "description": "Eye-catching social media posts, stories, and reels designed to maximize engagement.",
+    "active": true
+  },
+  {
+    "id": 16,
+    "category": "creative-branding",
+    "name": "Logo Design",
+    "icon": "✏️",
+    "description": "Unique, memorable logo designs that capture your brand identity and values.",
+    "active": true
+  },
+  {
+    "id": 17,
+    "category": "creative-branding",
+    "name": "Packaging Design",
+    "icon": "📦",
+    "description": "Attractive product packaging designs that stand out on shelves and online marketplaces.",
+    "active": true
+  },
+  {
+    "id": 18,
+    "category": "creative-branding",
+    "name": "Brochure Design",
+    "icon": "📄",
+    "description": "Professional brochure and catalog designs for print and digital distribution.",
+    "active": true
+  },
+  {
+    "id": 19,
+    "category": "creative-branding",
+    "name": "E-Invitation Videos",
+    "icon": "🎉",
+    "description": "Beautiful animated invitation videos for weddings, events, and corporate functions.",
+    "active": true
+  },
+  {
+    "id": 20,
+    "category": "creative-branding",
+    "name": "E-Invitation Cards",
+    "icon": "💌",
+    "description": "Elegant digital invitation cards with custom designs and interactive elements.",
+    "active": true
+  },
+  {
+    "id": 21,
+    "category": "development",
+    "name": "Website Development",
+    "icon": "🌐",
+    "description": "Custom responsive websites built with modern technologies for optimal performance.",
+    "active": true
+  },
+  {
+    "id": 22,
+    "category": "development",
+    "name": "Web Application Development",
+    "icon": "⚙️",
+    "description": "Scalable web applications with robust backends, APIs, and modern frameworks.",
+    "active": true
+  },
+  {
+    "id": 23,
+    "category": "development",
+    "name": "Mobile App Development",
+    "icon": "📲",
+    "description": "Native and cross-platform mobile apps for iOS and Android with intuitive UX.",
+    "active": true
+  },
+  {
+    "id": 24,
+    "category": "development",
+    "name": "Ecommerce Development",
+    "icon": "🛒",
+    "description": "Feature-rich ecommerce stores with payment integration, inventory, and order management.",
+    "active": true
+  },
+  {
+    "id": 25,
+    "category": "development",
+    "name": "WhatsApp API Integration",
+    "icon": "🔗",
+    "description": "WhatsApp Business API integration for automated messaging, chatbots, and CRM.",
+    "active": true
+  },
+  {
+    "id": 26,
+    "category": "development",
+    "name": "Hosting & Security",
+    "icon": "🛡️",
+    "description": "Secure hosting solutions with SSL, CDN, backups, and 24/7 monitoring.",
+    "active": true
+  },
+  {
+    "id": 27,
+    "category": "development",
+    "name": "Landing Page Development",
+    "icon": "📋",
+    "description": "High-converting landing pages optimized for lead generation and campaign performance.",
+    "active": true
+  },
+  {
+    "id": 28,
+    "category": "development",
+    "name": "Admin Panel Development",
+    "icon": "🖥️",
+    "description": "Custom admin dashboards for managing your business operations efficiently.",
+    "active": true
+  }
+]

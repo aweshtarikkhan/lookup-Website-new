@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "E-Commerce Platform",
+    "category": "website",
+    "description": "Full-stack e-commerce solution with payment gateway integration",
+    "image": "",
+    "client": "RetailMax",
+    "active": true
+  },
+  {
+    "id": 2,
+    "title": "Restaurant Brand Identity",
+    "category": "branding",
+    "description": "Complete brand identity design including logo, menu, and packaging",
+    "image": "",
+    "client": "Flavor House",
+    "active": true
+  },
+  {
+    "id": 3,
+    "title": "Social Media Campaign",
+    "category": "social-media",
+    "description": "360° social media campaign that increased engagement by 300%",
+    "image": "",
+    "client": "TechStart",
+    "active": true
+  },
+  {
+    "id": 4,
+    "title": "Mobile Banking App",
+    "category": "app",
+    "description": "Secure mobile banking application with biometric authentication",
+    "image": "",
+    "client": "FinanceGo",
+    "active": true
+  },
+  {
+    "id": 5,
+    "title": "Product Launch Video",
+    "category": "video",
+    "description": "Cinematic product launch video with 1M+ views",
+    "image": "",
+    "client": "GadgetPro",
+    "active": true
+  },
+  {
+    "id": 6,
+    "title": "SEO & Google Ads Campaign",
+    "category": "marketing",
+    "description": "Comprehensive digital marketing campaign with 5x ROI",
+    "image": "",
+    "client": "EduLearn",
+    "active": true
+  }
+]

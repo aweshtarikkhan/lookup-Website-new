@@ -1,0 +1,12 @@
+/* Legal Pages */
+.legal-content { max-width:800px; margin:0 auto; padding:0 20px 80px; }
+.legal-content h2 { font-size:1.6rem; margin:40px 0 16px; padding-top:20px; border-top:1px solid var(--glass-border); }
+.legal-content h2:first-child { border-top:none; padding-top:0; }
+.legal-content h3 { font-size:1.2rem; margin:24px 0 12px; color:var(--gray-200); }
+.legal-content p { color:#444444; margin-bottom:16px; line-height:1.8; }
+.legal-content ul { padding-left:20px; margin-bottom:16px; }
+.legal-content ul li { color:#444444; margin-bottom:8px; position:relative; padding-left:20px; }
+.legal-content ul li::before { content:'•'; position:absolute; left:0; color:var(--primary); font-weight:700; }
+.legal-content a { color:var(--primary); }
+.legal-content a:hover { text-decoration:underline; }
+.legal-content .last-updated { color:var(--gray-500); font-size:0.85rem; font-style:italic; margin-bottom:32px; }

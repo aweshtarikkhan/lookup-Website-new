@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Rajesh Kumar",
+    "company": "TechStart Solutions",
+    "rating": 5,
+    "text": "LookUPp transformed our online presence completely. Our leads increased by 400% within 3 months!",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Priya Sharma",
+    "company": "Fashion Boutique",
+    "rating": 5,
+    "text": "The team's creativity and dedication is unmatched. They delivered beyond our expectations!",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 3,
+    "name": "Amit Patel",
+    "company": "HealthCare Plus",
+    "rating": 5,
+    "text": "Professional, timely, and result-oriented. Best digital agency we've worked with!",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "Sneha Gupta",
+    "company": "EduTech Academy",
+    "rating": 5,
+    "text": "From website development to marketing, LookUPp handled everything flawlessly. Highly recommended!",
+    "image": "",
+    "active": true
+  }
+]

@@ -1,0 +1,128 @@
+{
+  "home": {
+    "hero": {
+      "badge": "🚀 #1 Digital Marketing Agency",
+      "title": "Grow Your Business With <br><span style=\"white-space: nowrap;\"><span class=\"text-gradient typed-text\">Digital Marketing Solutions</span><span class=\"typed-cursor\">|</span></span>",
+      "description": "We help businesses scale with powerful digital marketing strategies, creative branding, and cutting-edge web & app development. Let's build something extraordinary together."
+    },
+    "about": {
+      "badge": "About Us",
+      "title": "We Are <span>LookUPp</span> – Your Growth Partner",
+      "lead": "A full-service digital marketing & development agency dedicated to helping businesses thrive in the digital world.",
+      "description": "With years of experience and a passionate team of marketers, designers, and developers, we deliver result-oriented solutions that drive real business growth. From social media campaigns to custom web applications, we've got you covered."
+    },
+    "services": {
+      "badge": "Our Services",
+      "title": "What We <span>Offer</span>",
+      "subtitle": "Comprehensive digital solutions to take your business to the next level"
+    },
+    "why_us": {
+      "badge": "Why Choose Us",
+      "title": "Why <span>LookUPp</span>?",
+      "subtitle": "We deliver results that matter. Here's what sets us apart."
+    },
+    "work": {
+      "badge": "Our Work",
+      "title": "Featured <span>Projects</span>",
+      "subtitle": "A glimpse of our recent work across various domains"
+    },
+    "testimonials": {
+      "badge": "Testimonials",
+      "title": "What Our <span>Clients</span> Say",
+      "subtitle": "Don't just take our word for it — hear from our satisfied clients"
+    },
+    "process": {
+      "badge": "Our Process",
+      "title": "How We <span>Work</span>",
+      "subtitle": "A streamlined process designed for maximum efficiency and results"
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Frequently Asked <span>Questions</span>"
+    },
+    "cta": {
+      "title": "Ready to <span class=\"text-primary\">Grow</span> Your Business?",
+      "description": "Get a free consultation with our experts and discover how we can help your business reach its full potential."
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About <span>LookUPp</span>",
+      "description": "We are a passionate team of digital experts dedicated to helping your business grow online."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "To empower businesses with innovative digital marketing and development solutions."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "To be the leading digital agency recognized for creativity, transparency, and results."
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Our <span>Services</span>",
+      "description": "Comprehensive digital solutions to help your business reach its full potential."
+    },
+    "categories": {
+      "title": "What We Offer",
+      "subtitle": "Explore our wide range of digital marketing, branding, and development services."
+    }
+  },
+  "service-details": {
+    "hero": {
+      "title": "Service Details",
+      "description": "In-depth information about how we deliver excellence."
+    }
+  },
+  "projects": {
+    "hero": {
+      "title": "Our <span>Work</span>",
+      "subtitle": "Portfolio",
+      "description": "Explore our recent projects and see how we've helped businesses achieve their goals."
+    }
+  },
+  "contact": {
+    "hero": {
+      "title": "Contact <span>Us</span>",
+      "subtitle": "Get In Touch",
+      "description": "Have a project in mind? Let's talk about how we can help your business grow."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "hello@lookupp.in",
+      "phone": "+91 98765 43210",
+      "address": "Mumbai, India"
+    }
+  },
+  "privacy": {
+    "content": {
+      "title": "Privacy Policy",
+      "description": "Your privacy is critically important to us. This policy outlines how we collect, use, and protect your personal information."
+    }
+  },
+  "terms": {
+    "content": {
+      "title": "Terms & Conditions",
+      "description": "These terms and conditions govern your use of our website and services. Please read them carefully."
+    }
+  },
+  "refund": {
+    "content": {
+      "title": "Refund Policy",
+      "description": "Our refund and cancellation policies are designed to be fair and transparent."
+    }
+  },
+  "disclaimer": {
+    "content": {
+      "title": "Disclaimer",
+      "description": "The information provided on this website is for general informational purposes only."
+    }
+  },
+  "cookie": {
+    "content": {
+      "title": "Cookie Policy",
+      "description": "We use cookies to enhance your browsing experience and analyze site traffic."
+    }
+  }
+}

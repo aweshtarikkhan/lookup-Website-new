@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - LookUPp</title>
+  <link rel="icon" href="/assets/images/logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-layout" style="display:none;" id="portal-container">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2>look<span>UPp</span></h2>
+        <small>Agency Dashboard</small>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">📊 Dashboard</a>
+        <a href="#" class="nav-item admin-nav" data-section="services">⚙️ Manage Services</a>
+        <a href="#" class="nav-item admin-nav" data-section="projects">📁 Manage Projects</a>
+        <a href="#" class="nav-item" data-section="inquiries">📩 Inquiries & Leads <span class="badge" id="inquiry-badge">0</span></a>
+        <a href="#" class="nav-item admin-nav" data-section="quotation">📄 Manage Quotations</a>
+        
+        <div class="sidebar-divider"></div>
+        <a href="#" class="nav-item admin-nav" data-section="team">👥 Manage Team</a>
+        <a href="#" class="nav-item admin-nav" data-section="testimonials">⭐ Testimonials</a>
+        <a href="#" class="nav-item admin-nav" data-section="brands">🏆 Leading Brands</a>
+        
+        <div class="sidebar-divider admin-nav"></div>
+        <a href="#" class="nav-item admin-nav" data-section="content" id="nav-content">📄 Website Content</a>
+        <a href="#" class="nav-item admin-nav" data-section="settings" id="nav-settings">🔧 Site Settings</a>
+        <a href="#" class="nav-item admin-nav" data-section="users" id="nav-users">🔐 Manage Users</a>
+        
+        <div class="sidebar-divider"></div>
+        <a href="#" class="nav-item" onclick="logout()" style="color: #ef4444;">🚪 Logout</a>
+        <a href="/" class="nav-item">🌐 View Website</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <h1 id="page-title">Dashboard</h1>
+        <div class="topbar-right">
+          <span class="status-dot"></span> Online
+        </div>
+      </header>
+
+      <div class="content-area" id="content-area">
+        <!-- Dashboard -->
+        <div class="section active" id="section-dashboard">
+          <div class="stats-grid" id="stats-grid"></div>
+          <div class="card mt-3">
+            <h3>Recent Inquiries</h3>
+            <div id="recent-inquiries"></div>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div class="section" id="section-services">
+          <div class="section-toolbar"><h3>Manage Services</h3><button class="btn-add" onclick="openModal('service')">+ Add Service</button></div>
+          <div class="table-wrap"><table id="services-table"><thead><tr><th>Icon</th><th>Name</th><th>Category</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Projects -->
+        <div class="section" id="section-projects">
+          <div class="section-toolbar"><h3>Manage Projects</h3><button class="btn-add" onclick="openModal('project')">+ Add Project</button></div>
+          <div class="table-wrap"><table id="projects-table"><thead><tr><th>Title</th><th>Category</th><th>Client</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Inquiries -->
+        <div class="section" id="section-inquiries">
+          <div class="section-toolbar"><h3>All Inquiries & Leads</h3></div>
+          <div class="table-wrap"><table id="inquiries-table"><thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Team -->
+        <div class="section" id="section-team">
+          <div class="section-toolbar"><h3>Manage Team</h3><button class="btn-add" onclick="openModal('team')">+ Add Member</button></div>
+          <div class="table-wrap"><table id="team-table"><thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="section" id="section-testimonials">
+          <div class="section-toolbar"><h3>Manage Testimonials</h3><button class="btn-add" onclick="openModal('testimonial')">+ Add Testimonial</button></div>
+          <div class="table-wrap"><table id="testimonials-table"><thead><tr><th>Name</th><th>Company</th><th>Rating</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Trusted Brands -->
+        <div class="section" id="section-brands">
+          <div class="section-toolbar">
+            <h3>Manage Leading Brands</h3>
+            <button class="btn-add" onclick="promptAddBrand()">+ Add Brand</button>
+          </div>
+          <div class="table-wrap">
+            <table id="brands-table">
+              <thead><tr><th>Brand Name</th><th style="width: 150px;">Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="section" id="section-settings">
+          <div class="section-toolbar"><h3>Site Settings</h3></div>
+          <form id="settings-form" class="settings-form"></form>
+        </div>
+
+        <!-- Page Content -->
+        <div class="section" id="section-content">
+          <div class="section-toolbar"><h3>Manage Website Content</h3></div>
+          <div class="card" style="max-width:800px;">
+            <div class="form-group">
+              <label style="font-weight:600; color:#cbd5e1; font-size:0.9rem;">Select Page to Edit</label>
+              <select id="content-page-select" class="form-control" onchange="renderContentEditor()" style="padding:12px; background:#0f172a;">
+                <option value="">-- Choose a Page --</option>
+                <option value="home">Home Page</option>
+                <option value="about">About Page</option>
+                <option value="services">Services Page</option>
+                <option value="service-details">Service Details</option>
+                <option value="projects">Our Work / Projects</option>
+                <option value="contact">Contact Page</option>
+                <option value="privacy">Privacy Policy</option>
+                <option value="terms">Terms & Conditions</option>
+                <option value="refund">Refund Policy</option>
+                <option value="disclaimer">Disclaimer</option>
+                <option value="cookie">Cookie Policy</option>
+              </select>
+            </div>
+            
+            <form id="content-editor-form" style="display:none; margin-top:30px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.05);" onsubmit="saveContent(event)">
+               <div id="content-fields" style="display:flex; flex-direction:column; gap:25px;"></div>
+               <button type="submit" class="btn-submit full" style="margin-top:30px; font-size:16px;">Save Content Updates</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Users -->
+        <div class="section" id="section-users">
+          <div class="section-toolbar"><h3>Manage Users & Roles</h3><button class="btn-add" onclick="openModal('user')">+ Add User</button></div>
+          <div class="table-wrap"><table id="users-table"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+        </div>
+
+        <!-- Quotations List -->
+        <div class="section" id="section-quotation">
+          <div class="section-toolbar">
+            <h3>Manage Quotations</h3>
+            <button class="btn-add" onclick="openModal('quotation')">+ Add Quotation</button>
+          </div>
+          <div class="table-wrap">
+            <table id="quotations-table">
+              <thead><tr><th>Date</th><th>Quotation No</th><th>Client</th><th>Service</th><th>Total (INR)</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quotation Builder / Viewer -->
+        <div class="section" id="section-quotation-builder">
+          <div class="section-toolbar">
+            <h3>Quotation Preview</h3>
+            <div>
+              <button class="btn-add" style="background:#4b5563;margin-right:10px;" onclick="switchSection('quotation')">Back to List</button>
+              <button class="btn-add" style="background:#2563eb;margin-right:10px;" onclick="downloadQuotation()">📥 Download PDF</button>
+              <button class="btn-add" style="background:#16a34a;" onclick="sendQuotationEmail()">📧 Send Email</button>
+            </div>
+          </div>
+          
+          <div class="quotation-wrapper">
+            <div id="quotation-document" class="quotation-document">
+              <!-- Top Header Area -->
+              <div class="q-header">
+                <div class="q-logo-area"><div class="q-logo"><span style="color:#d97706;font-size:28px;">📊</span><div><h2>look<span>UPp</span></h2><p>DIGITAL MARKETING AGENCY</p></div></div></div>
+                <div class="q-title-area"><h1>QUOTATION</h1><p>Grow Your Brand. Generate Leads. Increase Revenue.</p></div>
+              </div>
+
+              <!-- Meta Info & Client Details -->
+              <div class="q-meta-section">
+                <div class="q-client-details"><div class="q-box-title">👤 CLIENT DETAILS</div><table class="q-client-table"><tr><td>Client Name</td><td>:</td><td id="q-client-name"></td></tr><tr><td>Mobile Number</td><td>:</td><td id="q-client-phone"></td></tr><tr><td>Email Address</td><td>:</td><td id="q-client-email"></td></tr><tr><td>Company Name</td><td>:</td><td id="q-client-company"></td></tr></table></div>
+                <div class="q-doc-details"><table class="q-doc-table"><tr><td>🧾</td><td><strong>Quotation No.</strong></td><td>:</td><td id="q-doc-no"></td></tr><tr><td>📅</td><td><strong>Date</strong></td><td>:</td><td id="q-doc-date"></td></tr><tr><td>🕘</td><td><strong>Valid Upto</strong></td><td>:</td><td id="q-doc-valid"></td></tr><tr><td>🏷️</td><td><strong>Quotation For</strong></td><td>:</td><td id="q-doc-for"></td></tr></table></div>
+              </div>
+
+              <!-- Services Table -->
+              <div class="q-services-section"><table class="q-services-table"><thead><tr><th width="5%">#</th><th width="40%">SERVICE / PLAN</th><th width="35%">DESCRIPTION</th><th width="10%">DURATION</th><th width="10%" style="text-align:right;">PRICE (INR)</th></tr></thead><tbody id="q-services-body"></tbody></table></div>
+
+              <!-- Totals -->
+              <div class="q-totals-section">
+                <div class="q-amount-words"><span style="font-size:24px;border:1px solid #0f172a;border-radius:50%;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;margin-right:15px;color:#0f172a;">₹</span><div><p style="font-size:12px;color:#64748b;margin:0;">Amount in Words</p><p id="q-amount-words-text" style="font-weight:600;color:#0f172a;margin:0;font-size:14px;"></p></div></div>
+                <div class="q-totals-box"><table class="q-totals-table"><tr><td>SUBTOTAL</td><td style="text-align:right;" id="q-subtotal">₹ 0</td></tr><tr><td>GST (18%)</td><td style="text-align:right;" id="q-gst">₹ 0</td></tr><tr class="q-grand-total"><td>TOTAL AMOUNT</td><td style="text-align:right;" id="q-total">₹ 0</td></tr></table></div>
+              </div>
+
+              <!-- Bottom Blocks -->
+              <div class="q-bottom-blocks">
+                <div class="q-block"><div class="q-block-title">📄 TERMS & CONDITIONS</div><ul class="q-terms-list"><li>This quotation is valid for 15 days from the date above.</li><li>50% advance payment required to start the project.</li><li>Ad spend is not included in the above package.</li><li>We are not responsible for delays due to client approvals.</li><li>Results may vary depending on industry & competition.</li><li>Minimum contract duration is 3 months.</li></ul></div>
+                <div class="q-block"><div class="q-block-title">💳 PAYMENT DETAILS</div><table class="q-payment-table"><tr><td>Bank Name</td><td>:</td><td>HDFC Bank</td></tr><tr><td>Account Name</td><td>:</td><td>LookUPp Agency</td></tr><tr><td>Account Number</td><td>:</td><td>50200012345678</td></tr><tr><td>IFSC Code</td><td>:</td><td>HDFC0001234</td></tr><tr><td>UPI ID</td><td>:</td><td>lookupp@upi</td></tr></table></div>
+                <div class="q-block" style="border:1px solid #e2e8f0; border-radius:8px;"><div class="q-block-title">✍️ AUTHORIZED SIGNATURE</div><div class="q-signature-area"><img src="/assets/images/logo.png" style="height:50px;opacity:0.2;position:absolute;right:20px;top:40px;" alt=""><div style="border-bottom:1px solid #cbd5e1; width:80%; margin:40px auto 10px;"></div><p style="font-weight:600;font-size:14px;color:#0f172a;">Authorized Signatory</p><p style="font-size:12px;color:#64748b;">LookUPp Agency</p></div></div>
+              </div>
+
+              <!-- Footer -->
+              <div class="q-footer"><div class="q-footer-left"><h3 style="color:#0f172a;margin-bottom:8px;">LookUPp AGENCY PVT. LTD.</h3><p style="margin:4px 0;font-size:12px;color:#334155;">📍 123, Business Hub, MG Road, Mumbai - 400001</p><p style="margin:4px 0;font-size:12px;color:#334155;">📞 +91 98765 43210</p><p style="margin:4px 0;font-size:12px;color:#334155;">✉️ hello@lookupp.in</p><p style="margin:4px 0;font-size:12px;color:#334155;">🌐 www.lookupp.in</p></div><div class="q-footer-right"><h2 style="color:#d97706;font-family:serif;font-style:italic;margin-bottom:8px;">Thank you!</h2><p style="font-size:12px;color:#e2e8f0;">We look forward to working with you<br>and growing your business.</p></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header"><h3 id="modal-title">Add Item</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+      <form id="modal-form" class="modal-body"></form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

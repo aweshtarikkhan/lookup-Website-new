@@ -1,0 +1,39 @@
+/* About Page */
+.about-intro-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.about-intro-content .lead { font-size:1.15rem; color:var(--gray-300); margin-bottom:20px; }
+.about-intro-content p { color:var(--gray-400); margin-bottom:12px; }
+.about-intro-image { border-radius:var(--radius-lg); overflow:hidden; background:var(--glass-bg); border:1px solid var(--glass-border); aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; }
+.mission-vision { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+.mv-card { padding:40px; text-align:center; }
+.mv-card .icon { font-size:3rem; margin-bottom:16px; }
+.mv-card h3 { margin-bottom:12px; }
+.mv-card p { color:var(--gray-400); font-size:0.95rem; }
+.founder-section { display:grid; grid-template-columns:300px 1fr; gap:48px; align-items:center; }
+.founder-image { width:100%; aspect-ratio:1; border-radius:var(--radius-lg); background:var(--glass-bg); border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center; font-size:5rem; overflow:hidden; }
+.founder-content blockquote { font-size:1.2rem; color:var(--gray-300); font-style:italic; border-left:3px solid var(--primary); padding-left:24px; margin-bottom:20px; }
+.founder-content .name { color:var(--white); font-weight:700; font-size:1.1rem; }
+.founder-content .role { color:var(--primary); font-size:0.9rem; }
+.team-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.team-card { text-align:center; padding:32px 20px; }
+.team-card .avatar { width:100px; height:100px; border-radius:50%; background:rgba(227,30,36,0.15); margin:0 auto 20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; border:2px solid var(--glass-border); transition:var(--transition); }
+.team-card:hover .avatar { border-color:var(--primary); transform:scale(1.1); }
+.team-card h3 { font-size:1.05rem; margin-bottom:4px; }
+.team-card .role { color:var(--primary); font-size:0.85rem; font-weight:500; }
+.team-card p { color:var(--gray-400); font-size:0.88rem; margin-top:10px; }
+.journey-timeline { position:relative; max-width:700px; margin:0 auto; padding-left:40px; }
+.journey-timeline::before { content:''; position:absolute; top:0; left:16px; bottom:0; width:2px; background:var(--glass-border); }
+.journey-item { position:relative; margin-bottom:40px; padding-left:24px; }
+.journey-item::before { content:''; position:absolute; left:-32px; top:4px; width:16px; height:16px; border-radius:50%; background:var(--primary); border:3px solid var(--dark); }
+.journey-item h3 { font-size:1.1rem; margin-bottom:4px; }
+.journey-item .year { color:var(--primary); font-weight:600; font-size:0.9rem; margin-bottom:8px; }
+.journey-item p { color:var(--gray-400); font-size:0.9rem; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+.stat-card { text-align:center; padding:40px 20px; }
+.stat-card .number { font-family:var(--font-heading); font-size:3rem; font-weight:900; color:var(--primary); }
+.stat-card .label { color:var(--gray-400); font-size:0.9rem; margin-top:8px; }
+@media(max-width:1024px) { .team-grid,.stats-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:768px) {
+  .about-intro-grid,.mission-vision,.founder-section{grid-template-columns:1fr;}
+  .founder-section{gap:32px;}
+}
+@media(max-width:600px) { .team-grid,.stats-grid{grid-template-columns:1fr;} }

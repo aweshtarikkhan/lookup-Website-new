@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1778937995117,
+    "date": "2026-05-16T13:26:35.117Z",
+    "qtNo": "QT-2026-2941",
+    "name": "Awesh tarik khan",
+    "email": "aweshtarikkhan@gmail.com",
+    "phone": "+917610599123",
+    "company": "",
+    "service": "Social Media Marketing",
+    "subtotal": 15000,
+    "gst": 2700,
+    "totalAmount": 17700
+  },
+  {
+    "id": 1779186420657,
+    "date": "2026-05-19T10:27:00.657Z",
+    "qtNo": "QT-2026-4328",
+    "name": "Prince Raj",
+    "email": "rajprince462004@gmail.com",
+    "phone": "+917739372294",
+    "company": "",
+    "service": "web_dev",
+    "subtotal": 15000,
+    "gst": 2700,
+    "totalAmount": 17700
+  },
+  {
+    "id": 1779447216316,
+    "date": "2026-05-22T10:53:36.316Z",
+    "qtNo": "QT-2026-5821",
+    "name": "a",
+    "email": "barsolifoods@gmail.com",
+    "phone": "123",
+    "company": "",
+    "services[]": "branding",
+    "service": "Website Development, Mobile App Development, Creative Branding",
+    "description": "• Custom, responsive website design and development.\n• Native/Hybrid mobile application development for iOS and Android.\n• Logo design, brand identity, and brand guidelines.",
+    "subtotal": 48000,
+    "gst": 8640,
+    "totalAmount": 56640
+  }
+]

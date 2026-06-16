@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal - LookUPp</title>
+  <link rel="icon" href="assets/images/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background-color: #f8fafc; color: #1e293b; font-family: 'Inter', sans-serif; padding-top: 80px; }
+    .portal-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr; gap: 30px; align-items: start; }
+    @media (max-width: 768px) { .portal-container { grid-template-columns: 1fr; } }
+    
+    .portal-sidebar { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 30px 0 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); text-align: center; }
+    .portal-nav-item { padding: 14px 24px; cursor: pointer; color: #64748b; font-weight: 500; transition: all 0.3s; border-left: 3px solid transparent; display: flex; align-items: center; gap: 12px; font-size: 0.95rem; text-align: left; }
+    .portal-nav-item:hover { background: #f8fafc; color: var(--primary); }
+    .portal-nav-item.active { background: rgba(227,30,36,0.05); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+    
+    .portal-content { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 40px; min-height: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+    .portal-section { display: none; animation: fadeIn 0.4s ease; }
+    .portal-section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .portal-header { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; }
+    .portal-header h2 { font-size: 1.8rem; color: #0f172a; margin-bottom: 5px; }
+    .portal-header p { color: #64748b; font-size: 0.95rem; margin: 0; }
+    
+    /* Avatar Upload UI */
+    .avatar-wrapper { position: relative; width: 100px; height: 100px; margin: 0 auto 15px; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, var(--primary), #ff7a7a); box-shadow: 0 10px 25px -5px rgba(227,30,36,0.3); }
+    .avatar-inner { position: relative; width: 100%; height: 100%; border-radius: 50%; background: #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; color: var(--primary); }
+    .avatar-inner img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .upload-btn { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 20px; padding: 6px 12px; font-size: 0.75rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 20px; }
+    .upload-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+    #sidebar-name { font-size: 1.2rem; color: #0f172a; font-weight: 700; margin: 0; }
+    #sidebar-role { font-size: 0.7rem; color: #64748b; font-weight: 600; letter-spacing: 1px; margin-top: 5px; text-transform: uppercase; background: #f1f5f9; display: inline-block; padding: 4px 10px; border-radius: 20px; }
+
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; margin-bottom: 8px; color: #475569; font-weight: 500; font-size: 0.9rem; }
+    .form-input { width: 100%; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 10px; font-family: inherit; font-size: 1rem; color: #0f172a; transition: all 0.3s; background: #f8fafc; }
+    .form-input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(227,30,36,0.1); }
+    .form-input:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+    
+    .btn-save { background: var(--primary); color: #fff; border: none; padding: 14px 30px; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(227,30,36,0.2); margin-top: 10px; }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(227,30,36,0.3); }
+
+    .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-left: 10px; }
+    .status-verified { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+    .status-unverified { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    .data-table th, .data-table td { padding: 14px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    .data-table th { color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .data-table tr:hover { background: #f8fafc; }
+    
+    .empty-state { text-align: center; padding: 60px 20px; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar" style="background: rgba(15, 23, 42, 0.9);">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="assets/images/logo.png" alt="LookUPp Logo">
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+      </div>
+      <div class="nav-cta">
+        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="portal-container">
+    <div class="portal-sidebar">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div class="avatar-wrapper">
+          <div class="avatar-inner" id="avatar">?</div>
+        </div>
+        <button class="upload-btn" onclick="document.getElementById('avatar-input').click()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload Photo
+        </button>
+        <input type="file" id="avatar-input" accept="image/*" style="display: none;" onchange="uploadAvatar(event)">
+        <h3 id="sidebar-name">Loading...</h3>
+        <p id="sidebar-role">Client</p>
+      </div>
+      
+      <div class="portal-nav-item active" onclick="switchTab('profile')">👤 My Profile</div>
+      <div class="portal-nav-item" onclick="switchTab('inquiries')">📩 My Enquiries</div>
+      <div class="portal-nav-item" onclick="switchTab('quotations')">📄 My Quotations</div>
+      <a href="/admin.html" id="admin-link" class="portal-nav-item" style="display:none; color:#10b981;">⚙️ Admin Dashboard</a>
+    </div>
+    
+    <div class="portal-content">
+      
+      <!-- Profile Section -->
+      <div class="portal-section active" id="sec-profile">
+        <div class="portal-header">
+          <h2>My Profile</h2>
+          <p style="color:var(--text-muted); margin-top:5px;">Manage your personal information and account settings.</p>
+        </div>
+        
+        <form id="profile-form" onsubmit="updateProfile(event)" style="max-width: 500px;">
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label>Full Name</label>
+            <input type="text" id="prof-name" class="form-control" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label>Email Address</label>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input type="email" id="prof-email" class="form-control" disabled style="opacity: 0.7;">
+              <span id="email-status" class="status-badge status-unverified">Unverified</span>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label>Phone Number</label>
+            <input type="tel" id="prof-phone" class="form-control" placeholder="+91 9876543210">
+          </div>
+          
+          <button type="submit" id="btn-save-prof" class="btn btn-primary">Save Changes</button>
+          <div id="prof-msg" style="margin-top:15px; font-size:14px; display:none;"></div>
+        </form>
+      </div>
+
+      <!-- Enquiries Section -->
+      <div class="portal-section" id="sec-inquiries">
+        <div class="portal-header">
+          <h2>My Enquiries</h2>
+          <p style="color:var(--text-muted); margin-top:5px;">Track the status of your service requests and inquiries.</p>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Service</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="inquiries-body">
+              <tr><td colspan="3" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quotations Section -->
+      <div class="portal-section" id="sec-quotations">
+        <div class="portal-header">
+          <h2>My Quotations</h2>
+          <p style="color:var(--text-muted); margin-top:5px;">View quotations sent by the agency.</p>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Quotation No</th>
+                <th>Service</th>
+                <th>Total (INR)</th>
+              </tr>
+            </thead>
+            <tbody id="quotations-body">
+              <tr><td colspan="4" class="empty-state">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://ctdfpuwkicqadhchticn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0ZGZwdXdraWNxYWRoY2h0aWNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwODUxNzYsImV4cCI6MjA5NDY2MTE3Nn0.dPf4YGHD389bGLlsBpbOPklq-SzU0mtYuYqltObs-zY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let userToken = '';
+
+    function switchTab(tab) {
+      document.querySelectorAll('.portal-nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.portal-section').forEach(el => el.classList.remove('active'));
+      
+      event.currentTarget.classList.add('active');
+      document.getElementById('sec-' + tab).classList.add('active');
+    }
+
+    async function loadData() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) {
+        window.location.href = '/';
+        return;
+      }
+      userToken = session.access_token;
+      
+      // Load Profile
+      try {
+        const res = await fetch('/api/users/me', { headers: { 'Authorization': 'Bearer ' + userToken } });
+        if (res.ok) {
+          const user = await res.json();
+          document.getElementById('prof-name').value = user.name || '';
+          document.getElementById('prof-email').value = user.email || '';
+          document.getElementById('prof-phone').value = user.phone || '';
+          
+          document.getElementById('sidebar-name').textContent = user.name || 'User';
+          
+          const localStored = localStorage.getItem('lookupp_user');
+          if (localStored) {
+            const u = JSON.parse(localStored);
+            if (u.profilePic) {
+              document.getElementById('avatar').innerHTML = `<img src="${u.profilePic}" style="width:100%; height:100%; object-fit:cover;">`;
+            } else {
+              document.getElementById('avatar').textContent = (user.name || 'U').charAt(0).toUpperCase();
+            }
+          } else {
+            document.getElementById('avatar').textContent = (user.name || 'U').charAt(0).toUpperCase();
+          }
+          
+          if(user.email_verified) {
+            const badge = document.getElementById('email-status');
+            badge.textContent = 'Verified';
+            badge.className = 'status-badge status-verified';
+          }
+
+          if (user.role !== 'user') {
+            document.getElementById('admin-link').style.display = 'flex';
+            let displayRole = user.role.replace('_', ' ').toUpperCase();
+            if (user.role === 'hidden_admin') displayRole = 'DEVELOPER ACCOUNT';
+            document.getElementById('sidebar-role').textContent = displayRole;
+          }
+        }
+      } catch(e){}
+
+      // Load Inquiries
+      try {
+        const res = await fetch('/api/users/me/inquiries', { headers: { 'Authorization': 'Bearer ' + userToken } });
+        if (res.ok) {
+          const inquiries = await res.json();
+          const tbody = document.getElementById('inquiries-body');
+          if(inquiries.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No inquiries found. Head to our services page to start growing!</td></tr>';
+          } else {
+            tbody.innerHTML = inquiries.reverse().map(i => `
+              <tr>
+                <td>${new Date(i.date).toLocaleDateString()}</td>
+                <td><strong>${i.service || 'General Inquiry'}</strong></td>
+                <td><span class="status-badge" style="background:rgba(255,255,255,0.1); text-transform:capitalize;">${i.status}</span></td>
+              </tr>
+            `).join('');
+          }
+        }
+      } catch(e){}
+
+      // Load Quotations
+      try {
+        const res = await fetch('/api/users/me/quotations', { headers: { 'Authorization': 'Bearer ' + userToken } });
+        if (res.ok) {
+          const quotes = await res.json();
+          const tbody = document.getElementById('quotations-body');
+          if(quotes.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="empty-state">No quotations found.</td></tr>';
+          } else {
+            tbody.innerHTML = quotes.reverse().map(q => `
+              <tr>
+                <td>${new Date(q.date).toLocaleDateString()}</td>
+                <td><strong>${q.qtNo}</strong></td>
+                <td>${q.service || '-'}</td>
+                <td>₹ ${q.totalAmount ? q.totalAmount.toLocaleString('en-IN') : '-'}</td>
+              </tr>
+            `).join('');
+          }
+        }
+      } catch(e){}
+    }
+
+    async function updateProfile(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-save-prof');
+      const msg = document.getElementById('prof-msg');
+      
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+      msg.style.display = 'none';
+
+      const name = document.getElementById('prof-name').value;
+      const phone = document.getElementById('prof-phone').value;
+
+      try {
+        const res = await fetch('/api/users/me', {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + userToken 
+          },
+          body: JSON.stringify({ name, phone })
+        });
+        
+        if (res.ok) {
+          msg.textContent = 'Profile updated successfully!';
+          msg.style.color = '#10b981';
+          document.getElementById('sidebar-name').textContent = name;
+        } else {
+          msg.textContent = 'Failed to update profile.';
+          msg.style.color = '#ef4444';
+        }
+      } catch(err) {
+        msg.textContent = 'Error updating profile.';
+        msg.style.color = '#ef4444';
+      }
+      
+      msg.style.display = 'block';
+      btn.textContent = 'Save Changes';
+      btn.disabled = false;
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      localStorage.removeItem('lookupp_user');
+      Object.keys(localStorage).forEach(key => { if(key.startsWith('sb-')) localStorage.removeItem(key); });
+      window.location.href = '/';
+    }
+
+    function uploadAvatar(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const base64Data = event.target.result;
+        document.getElementById('avatar').innerHTML = `<img src="${base64Data}" style="width:100%; height:100%; object-fit:cover;">`;
+        // Update local storage
+        const stored = localStorage.getItem('lookupp_user');
+        let u = stored ? JSON.parse(stored) : {};
+        u.profilePic = base64Data;
+        localStorage.setItem('lookupp_user', JSON.stringify(u));
+        showToast('success', '✅', 'Profile photo updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function showToast(type, icon, text) {
+      // Simplified toast logic if needed in profile page
+      alert(text);
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

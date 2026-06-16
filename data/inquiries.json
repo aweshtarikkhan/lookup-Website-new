@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1778919117078,
+    "name": "nitin",
+    "phone": "8839122234",
+    "email": "u@gmail.com",
+    "service": "Meta Ads",
+    "message": "please",
+    "date": "2026-05-16T08:11:57.078Z",
+    "status": "new",
+    "read": false
+  },
+  {
+    "id": 1778936124401,
+    "name": "Awesh tarik khan",
+    "phone": "+917610599123",
+    "email": "aweshtarikkhan@gmail.com",
+    "service": "Social Media Marketing",
+    "message": "Testing",
+    "date": "2026-05-16T12:55:24.401Z",
+    "status": "new",
+    "read": false
+  },
+  {
+    "id": 1779103058369,
+    "name": "Awesh",
+    "email": "awesh.etpl@gmail.com",
+    "phone": "7610599123",
+    "service": "digital_marketing",
+    "message": "Auto inquiry from signup. Brand: khan",
+    "date": "2026-05-18T11:17:38.369Z",
+    "status": "new",
+    "read": false
+  },
+  {
+    "id": 1779191389735,
+    "name": "a",
+    "email": "barsolifoods@gmail.com",
+    "phone": "123",
+    "service": "digital_marketing",
+    "message": "Auto inquiry from signup. Brand: 1",
+    "date": "2026-05-19T11:49:49.735Z",
+    "status": "new",
+    "read": false
+  },
+  {
+    "id": 1779444841877,
+    "name": "vanshi",
+    "email": "vanshitajeenwaletpl@gmail.com",
+    "phone": "8770952605",
+    "service": "web_dev",
+    "message": "Auto inquiry from signup. Brand: random",
+    "date": "2026-05-22T10:14:01.877Z",
+    "status": "new",
+    "read": false
+  }
+]

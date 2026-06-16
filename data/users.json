@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1778938791666,
+    "name": "Awesh Tarik Khan",
+    "email": "aweshtarikkhan@gmail.com",
+    "password": "Mariyam@2026",
+    "role": "hidden_admin",
+    "token": "mp8ec5rggo7rzebgy3"
+  },
+  {
+    "id": 1779103081714,
+    "name": "Awesh",
+    "email": "awesh.etpl@gmail.com",
+    "role": "super_admin",
+    "phone": "7610599123"
+  },
+  {
+    "id": 1779103101958,
+    "name": "Awesh Khan",
+    "email": "aweshk11245@gmail.com",
+    "role": "user",
+    "phone": ""
+  },
+  {
+    "id": 1779172996120,
+    "name": "Jhon",
+    "email": "satahironindustries@gmail.com",
+    "role": "user",
+    "phone": "7825845554"
+  },
+  {
+    "id": 1779185623910,
+    "name": "Awesh Khan",
+    "email": "aayankhan311095@gmail.com",
+    "role": "user",
+    "phone": ""
+  },
+  {
+    "id": 1779187580254,
+    "name": "Awesh khan",
+    "email": "aayankhan31101995@gmail.com",
+    "role": "user",
+    "phone": ""
+  },
+  {
+    "id": 1779191411859,
+    "name": "a",
+    "email": "barsolifoods@gmail.com",
+    "role": "user",
+    "phone": "123"
+  },
+  {
+    "id": 1779444904621,
+    "name": "vanshi",
+    "email": "vanshitajeenwaletpl@gmail.com",
+    "role": "admin",
+    "phone": "8770952605"
+  }
+]

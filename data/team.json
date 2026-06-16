@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Founder",
+    "role": "CEO & Founder",
+    "bio": "Visionary leader with 10+ years of experience in digital marketing and technology.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Creative Head",
+    "role": "Creative Director",
+    "bio": "Award-winning creative professional specializing in brand strategy and visual design.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 3,
+    "name": "Tech Lead",
+    "role": "CTO",
+    "bio": "Full-stack developer with expertise in modern web and mobile technologies.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "Marketing Head",
+    "role": "Marketing Director",
+    "bio": "Digital marketing strategist with proven track record of delivering exceptional ROI.",
+    "image": "",
+    "active": true
+  }
+]
