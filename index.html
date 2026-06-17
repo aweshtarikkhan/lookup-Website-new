@@ -670,7 +670,7 @@
 
     async function applyCMSContent() {
       try {
-        const res = await fetch('/api/content');
+        const res = await fetch('/api/content?t=' + new Date().getTime());
         if (res.ok) {
           const content = await res.json();
           document.querySelectorAll('[data-cms]').forEach(el => {
@@ -686,7 +686,7 @@
         }
         
         // Load Trusted Brands from settings
-        const settingsRes = await fetch('/api/settings');
+        const settingsRes = await fetch('/api/settings?t=' + new Date().getTime());
         if (settingsRes.ok) {
           const settings = await settingsRes.json();
           if (settings.trustedBrands) {
