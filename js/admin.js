@@ -315,7 +315,7 @@ async function deleteBrand(index) {
 
 async function saveBrandsList() {
   const val = currentBrandsList.join(', ');
-  const settings = await fetch('/api/settings').then(r => r.json());
+  const settings = await fetch('/api/settings?t=' + new Date().getTime()).then(r => r.json());
   settings.trustedBrands = val;
   try {
     const response = await fetch('/api/settings', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)});

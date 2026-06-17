@@ -682,12 +682,17 @@ app.get('/api/settings', (req, res) => {
 });
 
 app.put('/api/settings', (req, res) => {
-  const current = fs.existsSync(dataFiles.settings)
-    ? JSON.parse(fs.readFileSync(dataFiles.settings, 'utf8'))
-    : {};
-  const updated = { ...current, ...req.body };
-  fs.writeFileSync(dataFiles.settings, JSON.stringify(updated, null, 2), 'utf8');
-  res.json({ success: true, data: updated });
+  try {
+    const current = fs.existsSync(dataFiles.settings)
+      ? JSON.parse(fs.readFileSync(dataFiles.settings, 'utf8'))
+      : {};
+    const updated = { ...current, ...req.body };
+    fs.writeFileSync(dataFiles.settings, JSON.stringify(updated, null, 2), 'utf8');
+    res.json({ success: true, data: updated });
+  } catch (error) {
+    console.error("Error saving settings:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // --- Content CMS ---
