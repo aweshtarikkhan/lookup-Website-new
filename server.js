@@ -266,8 +266,10 @@ initializeData();
 
 // --- Auth Middleware ---
 async function authMiddleware(req, res, next) {
-  // Allow GET requests for public data
-  if (req.method === 'GET' && ['/api/services', '/api/projects', '/api/team', '/api/testimonials', '/api/settings'].includes(req.path)) {
+  // Allow GET requests for public data (req.originalUrl contains the full path including /api)
+  const publicRoutes = ['/api/services', '/api/projects', '/api/team', '/api/testimonials', '/api/settings', '/api/content'];
+  const pathWithoutQuery = req.originalUrl.split('?')[0];
+  if (req.method === 'GET' && publicRoutes.includes(pathWithoutQuery)) {
     return next();
   }
   
