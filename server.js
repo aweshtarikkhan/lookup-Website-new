@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
@@ -14,6 +15,7 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Middleware
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname)));
