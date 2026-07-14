@@ -14,6 +14,7 @@ const originalFetch = window.fetch;
 window.fetch = async function() {
   let [resource, config] = arguments;
   if (typeof resource === 'string' && resource.startsWith('/api/')) {
+    resource = 'http://localhost:3000' + resource; // Point to backend
     config = config || {};
     config.headers = config.headers || {};
     if (config.headers instanceof Headers) {

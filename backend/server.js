@@ -1,0 +1,257 @@
+const express = require('express');
+const compression = require('compression');
+const cors = require('cors');
+const multer = require('multer');
+const { createClient } = require('@supabase/supabase-js');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+const app = express();
+const PORT = 3000;
+
+// Initialize Supabase
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Middleware
+app.use(compression());
+app.use(cors()); // Allow frontend to connect
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Multer config for memory storage (for Supabase upload)
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+const JWT_SECRET = 'your-secret-key-123'; // In production, move to .env
+
+// --- Auth Middleware ---
+async function authMiddleware(req, res, next) {
+  const publicRoutes = ['/api/services', '/api/projects', '/api/team', '/api/testimonials', '/api/settings', '/api/content'];
+  const pathWithoutQuery = req.originalUrl.split('?')[0];
+  if (req.method === 'GET' && publicRoutes.includes(pathWithoutQuery)) {
+    return next();
+  }
+  
+  if (req.method === 'POST' && (pathWithoutQuery === '/api/inquiries' || pathWithoutQuery === '/api/quotations' || pathWithoutQuery === '/api/feedback')) {
+      return next();
+  }
+
+  const token = req.headers['authorization']?.split(' ')[1] || req.headers['x-auth-token'];
+  if (!token) {
+    // Check if route is admin only and we don't have token
+    if (pathWithoutQuery.startsWith('/api/admin')) return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { data: user, error } = await supabase.from('users').select('*').eq('id', decoded.id).single();
+    if (error || !user) return res.status(401).json({ error: 'Invalid User' });
+    
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid Token' });
+  }
+}
+
+app.post('/api/admin/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+
+  const { data: user, error } = await supabase.from('users').select('*').eq('email', email).single();
+  
+  if (error || !user || user.password !== password) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
+  
+  const { password: _, ...userWithoutPassword } = user;
+  res.json({ success: true, token, user: userWithoutPassword });
+});
+
+// --- Generic CRUD Handlers ---
+
+const createCrudEndpoints = (app, route, table) => {
+  // GET all
+  app.get(route, async (req, res) => {
+    try {
+      const { data, error } = await supabase.from(table).select('*').order('id', { ascending: false });
+      if (error) throw error;
+      res.json(data);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // POST create
+  app.post(route, async (req, res) => {
+    try {
+      const newItem = { id: Date.now(), ...req.body };
+      const { data, error } = await supabase.from(table).insert([newItem]).select();
+      if (error) throw error;
+      res.json({ success: true, data: data[0] });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // PUT update
+  app.put(`${route}/:id`, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { data, error } = await supabase.from(table).update(req.body).eq('id', id).select();
+      if (error) throw error;
+      res.json({ success: true, data: data[0] });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // DELETE
+  app.delete(`${route}/:id`, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { error } = await supabase.from(table).delete().eq('id', id);
+      if (error) throw error;
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+};
+
+createCrudEndpoints(app, '/api/services', 'services');
+createCrudEndpoints(app, '/api/inquiries', 'inquiries');
+createCrudEndpoints(app, '/api/quotations', 'quotations');
+createCrudEndpoints(app, '/api/testimonials', 'testimonials');
+createCrudEndpoints(app, '/api/feedback', 'feedback');
+createCrudEndpoints(app, '/api/users', 'users');
+
+// --- Custom Upload Endpoints ---
+const handleUpload = async (req, folder) => {
+  if (!req.file) return null;
+  const filename = `${folder}/${Date.now()}-${req.file.originalname.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+  const { data, error } = await supabase.storage.from('lookupp-uploads').upload(filename, req.file.buffer, {
+    contentType: req.file.mimetype
+  });
+  if (error) return null;
+  const { data: publicUrlData } = supabase.storage.from('lookupp-uploads').getPublicUrl(filename);
+  return publicUrlData.publicUrl;
+};
+
+// Projects
+app.get('/api/projects', async (req, res) => {
+  const { data } = await supabase.from('projects').select('*').order('id', { ascending: false });
+  res.json(data || []);
+});
+app.post('/api/projects', upload.single('image'), async (req, res) => {
+  const newItem = { id: Date.now(), ...req.body };
+  if (req.body.active === 'true') newItem.active = true;
+  if (req.body.active === 'false') newItem.active = false;
+  const imageUrl = await handleUpload(req, 'projects');
+  if (imageUrl) newItem.image = imageUrl;
+  
+  const { data, error } = await supabase.from('projects').insert([newItem]).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0] });
+});
+app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
+  const id = parseInt(req.params.id);
+  const updateItem = { ...req.body };
+  if (req.body.active === 'true') updateItem.active = true;
+  if (req.body.active === 'false') updateItem.active = false;
+  
+  const imageUrl = await handleUpload(req, 'projects');
+  if (imageUrl) updateItem.image = imageUrl;
+
+  const { data, error } = await supabase.from('projects').update(updateItem).eq('id', id).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0] });
+});
+app.delete('/api/projects/:id', async (req, res) => {
+  await supabase.from('projects').delete().eq('id', parseInt(req.params.id));
+  res.json({ success: true });
+});
+
+// Team
+app.get('/api/team', async (req, res) => {
+  const { data } = await supabase.from('team').select('*').order('id', { ascending: true });
+  res.json(data || []);
+});
+app.post('/api/team', upload.single('image'), async (req, res) => {
+  const newItem = { id: Date.now(), ...req.body };
+  if (req.body.active === 'true') newItem.active = true;
+  if (req.body.active === 'false') newItem.active = false;
+  const imageUrl = await handleUpload(req, 'team');
+  if (imageUrl) newItem.image = imageUrl;
+  
+  const { data, error } = await supabase.from('team').insert([newItem]).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0] });
+});
+app.put('/api/team/:id', upload.single('image'), async (req, res) => {
+  const id = parseInt(req.params.id);
+  const updateItem = { ...req.body };
+  if (req.body.active === 'true') updateItem.active = true;
+  if (req.body.active === 'false') updateItem.active = false;
+  const imageUrl = await handleUpload(req, 'team');
+  if (imageUrl) updateItem.image = imageUrl;
+
+  const { data, error } = await supabase.from('team').update(updateItem).eq('id', id).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0] });
+});
+app.delete('/api/team/:id', async (req, res) => {
+  await supabase.from('team').delete().eq('id', parseInt(req.params.id));
+  res.json({ success: true });
+});
+
+// Settings & Content (Key-Value)
+app.get('/api/settings', async (req, res) => {
+  const { data } = await supabase.from('key_value_store').select('data').eq('id', 'settings').single();
+  res.json(data ? data.data : {});
+});
+app.put('/api/settings', async (req, res) => {
+  const { data, error } = await supabase.from('key_value_store').upsert({ id: 'settings', data: req.body }).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0].data });
+});
+
+app.get('/api/content', async (req, res) => {
+  const { data } = await supabase.from('key_value_store').select('data').eq('id', 'content').single();
+  res.json(data ? data.data : {});
+});
+app.put('/api/content', authMiddleware, async (req, res) => {
+  const { data, error } = await supabase.from('key_value_store').upsert({ id: 'content', data: req.body }).select();
+  res.json(error ? { error: error.message } : { success: true, data: data[0].data });
+});
+
+app.get('/api/stats', async (req, res) => {
+  try {
+    const { count: inquiries } = await supabase.from('inquiries').select('*', { count: 'exact', head: true });
+    const { count: quotations } = await supabase.from('quotations').select('*', { count: 'exact', head: true });
+    const { count: projects } = await supabase.from('projects').select('*', { count: 'exact', head: true });
+    
+    // Revenue sum logic simplified (or you can do it via RPC if needed)
+    const { data: revData } = await supabase.from('quotations').select('budget').eq('status', 'Completed');
+    let totalRevenue = 0;
+    if (revData) {
+      revData.forEach(q => {
+        const amount = parseInt((q.budget || '').replace(/[^0-9]/g, ''));
+        if (!isNaN(amount)) totalRevenue += amount;
+      });
+    }
+
+    res.json({
+      inquiries: inquiries || 0,
+      quotations: quotations || 0,
+      projects: projects || 0,
+      totalRevenue: totalRevenue || 0
+    });
+  } catch (err) {
+    res.json({ inquiries: 0, quotations: 0, projects: 0, totalRevenue: 0 });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend server running on http://localhost:${PORT}`);
+});
