@@ -8,7 +8,7 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
-const { initDB, getDB } = require('./database');
+const { initDB, getDB } = require('./database-wasm');
 
 const app = express();
 const PORT = process.env.PORT || 3005;
