@@ -11,7 +11,7 @@ require('dotenv').config();
 const { initDB, getDB } = require('./database');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3005;
 
 // Initialize Supabase (ONLY for Auth now)
 const supabaseUrl = process.env.SUPABASE_URL;
