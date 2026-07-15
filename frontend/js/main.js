@@ -2,9 +2,6 @@
 const originalFetch = window.fetch;
 window.fetch = async function() {
   let [resource, config] = arguments;
-  if (typeof resource === 'string' && resource.startsWith('/api/')) {
-    resource = 'http://localhost:3000' + resource; // Point to backend
-  }
   return originalFetch(resource, config);
 };
 
@@ -104,7 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const id = this.getAttribute('href');
-      if (id === '#') return;
+      // If href was changed dynamically and no longer starts with #, let it behave normally
+      if (!id || !id.startsWith('#') || id === '#') return;
+      
       e.preventDefault();
       const target = document.querySelector(id);
       if (target) {
@@ -309,3 +308,219 @@ function showToast(type, icon, text) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
+
+
+// DYNAMIC CONTENT SYNC
+async function loadDynamicContent() {
+  try {
+    // 1. Testimonials
+    const tContainer = document.querySelector('.testimonial-slider');
+    if (tContainer) {
+      const res = await fetch('/api/testimonials');
+      if (res.ok) {
+        const testimonials = await res.json();
+        if (testimonials && testimonials.length > 0) {
+          tContainer.innerHTML = testimonials.map(t => `
+            <div class="glass-card testimonial-card">
+              <div class="quote">"</div>
+              <div class="stars">${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}</div>
+              <p>${t.feedback}</p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">${t.client_name.charAt(0).toUpperCase()}</div>
+                <div class="testimonial-info">
+                  <div class="name">${t.client_name}</div>
+                  <div class="company">${t.company || 'Client'}</div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // 2. Team
+    const teamContainer = document.querySelector('.team-grid');
+    if (teamContainer) {
+      const res = await fetch('/api/team');
+      if (res.ok) {
+        const team = await res.json();
+        if (team && team.length > 0) {
+          teamContainer.innerHTML = team.map(member => `
+            <div class="glass-card team-card">
+              <div class="avatar" style="overflow:hidden; display:flex; align-items:center; justify-content:center;">
+                ${member.image ? `<img src="${member.image}" style="width:100%;height:100%;object-fit:cover;">` : '👤'}
+              </div>
+              <h3>${member.name}</h3>
+              <div class="role">${member.role}</div>
+              <p>${member.bio || ''}</p>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // 3. Projects
+    const projectsContainer = document.querySelector('.portfolio-grid');
+    if (projectsContainer) {
+      const res = await fetch('/api/projects');
+      if (res.ok) {
+        const projects = await res.json();
+        if (projects && projects.length > 0) {
+          projectsContainer.innerHTML = projects.map(p => `
+            <div class="portfolio-card glass-card" data-category="${p.category || 'website'}" data-title="${p.title}">
+              ${p.image ? `<img src="${p.image}" style="width:100%; height:200px; border-radius:12px 12px 0 0; object-fit:cover; margin:-24px -24px 20px -24px; max-width: none;">` : 
+              `<div class="pc-icon-wrapper">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 4v10h16V8H4z"/></svg>
+              </div>`}
+              <div class="pc-content">
+                <div class="pc-header"><span class="pc-tag">${p.category || 'Portfolio'}</span><span class="pc-client">${p.client || 'Client'}</span></div>
+                <h3>${p.title}</h3>
+                <p class="pc-desc">${p.description || ''}</p>
+                <span class="view-btn">View Details →</span>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // 4. Services
+    const servicesContainer = document.querySelector('.services-grid'); // For index.html
+    const sDigital = document.querySelector('#digital-marketing .services-detail-grid'); // For services.html
+    const sBranding = document.querySelector('#creative-branding .services-detail-grid');
+    const sDev = document.querySelector('#development .services-detail-grid');
+
+    if (servicesContainer || sDigital || sBranding || sDev) {
+      const res = await fetch('/api/services');
+      if (res.ok) {
+        const services = await res.json();
+        if (services && services.length > 0) {
+          
+          // Populate index.html
+          if (servicesContainer) {
+            servicesContainer.innerHTML = services.map(s => `
+              <div class="service-card glass-card">
+                <div class="icon">${s.icon || '⚙️'}</div>
+                <h3>${s.name}</h3>
+                <p>${s.description || ''}</p>
+                <a href="service-details.html?id=${s.id}" class="card-link">Learn More →</a>
+              </div>
+            `).join('');
+          }
+          
+          // Populate services.html grids
+          const generateServiceCard = (s) => `
+            <div class="glass-card service-detail-card">
+              <span class="icon">${s.icon || '⚙️'}</span>
+              <h3>${s.name}</h3>
+              <p>${s.description || ''}</p>
+              <a href="service-details.html?id=${s.id}" class="learn-more">Get Started →</a>
+            </div>
+          `;
+          
+          if (sDigital) {
+            sDigital.innerHTML = services.filter(s => s.category === 'digital-marketing').map(generateServiceCard).join('');
+          }
+          if (sBranding) {
+            sBranding.innerHTML = services.filter(s => s.category === 'branding').map(generateServiceCard).join('');
+          }
+          if (sDev) {
+            sDev.innerHTML = services.filter(s => s.category === 'development').map(generateServiceCard).join('');
+          }
+        }
+      }
+    }
+
+  } catch(e) { console.error('Error loading dynamic content:', e); }
+}
+
+async function applyCMSContent() {
+  try {
+    const res = await fetch('/api/content?t=' + new Date().getTime());
+    if (res.ok) {
+      const content = await res.json();
+      document.querySelectorAll('[data-cms]').forEach(el => {
+        const path = el.getAttribute('data-cms').split('.');
+        let val = content;
+        for(let p of path) {
+          if(val) val = val[p];
+        }
+        if(val !== undefined && val !== null && val !== '') {
+          el.innerHTML = val;
+        }
+      });
+      
+      document.querySelectorAll('[data-cms-href]').forEach(el => {
+        const path = el.getAttribute('data-cms-href').split('.');
+        let val = content;
+        for(let p of path) {
+          if(val) val = val[p];
+        }
+        if(val !== undefined && val !== null && val !== '') {
+          const prefix = el.getAttribute('data-cms-href-prefix') || '';
+          el.setAttribute('href', prefix + val);
+          el.style.display = ''; // reset display in case it was hidden
+        } else if (el.closest('.contact-social') || el.closest('.footer-social')) {
+          el.style.display = 'none'; // hide if no url
+        }
+      });
+      
+      document.querySelectorAll('[data-cms-src]').forEach(el => {
+        const path = el.getAttribute('data-cms-src').split('.');
+        let val = content;
+        for(let p of path) {
+          if(val) val = val[p];
+        }
+        if(val !== undefined && val !== null && val !== '') {
+          el.setAttribute('src', val);
+        }
+      });
+      
+      // Load Trusted Brands
+      const clientsRes = await fetch('/api/clients?t=' + new Date().getTime());
+      if (clientsRes.ok) {
+        const brands = await clientsRes.json();
+        if (brands && brands.length > 0) {
+          const scrollDiv = document.querySelector('.trusted-scroll');
+          if (scrollDiv) {
+            const brandsHtml = brands.map(b => `
+              <span class="logo-item">
+                ${b.logo_url ? `<img src="${b.logo_url}" alt="${b.name || 'Client logo'}" style="height: 50px; max-width: 150px; object-fit: contain;">` : b.name}
+              </span>
+            `).join('');
+            scrollDiv.innerHTML = brandsHtml + brandsHtml;
+          }
+        }
+      }
+    }
+  } catch(e) { console.error('Error applying CMS content:', e); }
+}
+
+async function applySettings() {
+  try {
+    const res = await fetch('/api/settings?t=' + new Date().getTime());
+    if (res.ok) {
+      const settings = await res.json();
+      document.querySelectorAll('[data-setting]').forEach(el => {
+        const key = el.getAttribute('data-setting');
+        if (settings[key]) {
+          el.innerHTML = settings[key];
+        }
+      });
+      document.querySelectorAll('[data-setting-href]').forEach(el => {
+        const key = el.getAttribute('data-setting-href');
+        const prefix = el.getAttribute('data-setting-href-prefix') || '';
+        if (settings[key]) {
+          el.setAttribute('href', prefix + settings[key]);
+        } else {
+          el.style.display = 'none'; // hide social icon if no link provided
+        }
+      });
+    }
+  } catch(e) { console.error('Error applying settings:', e); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadDynamicContent();
+  applyCMSContent();
+});

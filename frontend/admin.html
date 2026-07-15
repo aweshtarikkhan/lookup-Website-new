@@ -93,11 +93,11 @@
         <div class="section" id="section-brands">
           <div class="section-toolbar">
             <h3>Manage Leading Brands</h3>
-            <button class="btn-add" onclick="promptAddBrand()">+ Add Brand</button>
+            <button class="btn-add" onclick="openModal('brand')">+ Add Brand</button>
           </div>
           <div class="table-wrap">
             <table id="brands-table">
-              <thead><tr><th>Brand Name</th><th style="width: 150px;">Actions</th></tr></thead>
+              <thead><tr><th>Logo</th><th>Brand Name</th><th style="width: 150px;">Actions</th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
@@ -173,7 +173,7 @@
             <div id="quotation-document" class="quotation-document">
               <!-- Top Header Area -->
               <div class="q-header">
-                <div class="q-logo-area"><div class="q-logo"><span style="color:#d97706;font-size:28px;">📊</span><div><h2>look<span>UPp</span></h2><p>DIGITAL MARKETING AGENCY</p></div></div></div>
+                <div class="q-logo-area"><img src="/assets/images/logo.png" style="max-height: 80px;" alt="LookUPp Logo"></div>
                 <div class="q-title-area"><h1>QUOTATION</h1><p>Grow Your Brand. Generate Leads. Increase Revenue.</p></div>
               </div>
 
@@ -219,6 +219,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="/js/admin.js"></script>
+  <script src="/js/admin.js?v=1.3"></script>
 </body>
 </html>

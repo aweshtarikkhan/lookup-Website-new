@@ -4,26 +4,49 @@ document.addEventListener('DOMContentLoaded', () => {
   // Typed text effect for hero
   const typedEl = document.querySelector('.typed-text');
   if (typedEl) {
-    const texts = [
+    let texts = [
       'Digital Marketing Solutions',
       'Creative Branding Services',
       'Website & App Development',
       'Performance Marketing',
       'Business Growth Partner'
     ];
-    let textIdx = 0, charIdx = 0, isDeleting = false;
-    function typeEffect() {
-      const current = texts[textIdx];
-      if (isDeleting) {
-        typedEl.textContent = current.substring(0, charIdx--);
-        if (charIdx < 0) { isDeleting = false; textIdx = (textIdx + 1) % texts.length; setTimeout(typeEffect, 500); return; }
-      } else {
-        typedEl.textContent = current.substring(0, charIdx++);
-        if (charIdx > current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
+    
+    // Fetch dynamic texts if available
+    fetch('/api/content').then(r=>r.json()).then(data => {
+      if(data?.home?.hero?.typingLines) {
+        texts = data.home.hero.typingLines.split(',').map(s=>s.trim()).filter(s=>s);
       }
-      setTimeout(typeEffect, isDeleting ? 30 : 80);
-    }
-    setTimeout(typeEffect, 1000);
+      
+      let textIdx = 0, charIdx = 0, isDeleting = false;
+      function typeEffect() {
+        const current = texts[textIdx] || '';
+        if (isDeleting) {
+          typedEl.textContent = current.substring(0, charIdx--);
+          if (charIdx < 0) { isDeleting = false; textIdx = (textIdx + 1) % texts.length; setTimeout(typeEffect, 500); return; }
+        } else {
+          typedEl.textContent = current.substring(0, charIdx++);
+          if (charIdx > current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
+        }
+        setTimeout(typeEffect, isDeleting ? 30 : 80);
+      }
+      setTimeout(typeEffect, 1000);
+    }).catch(() => {
+      // Fallback if fetch fails
+      let textIdx = 0, charIdx = 0, isDeleting = false;
+      function typeEffect() {
+        const current = texts[textIdx];
+        if (isDeleting) {
+          typedEl.textContent = current.substring(0, charIdx--);
+          if (charIdx < 0) { isDeleting = false; textIdx = (textIdx + 1) % texts.length; setTimeout(typeEffect, 500); return; }
+        } else {
+          typedEl.textContent = current.substring(0, charIdx++);
+          if (charIdx > current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
+        }
+        setTimeout(typeEffect, isDeleting ? 30 : 80);
+      }
+      setTimeout(typeEffect, 1000);
+    });
   }
 
   // Particle background

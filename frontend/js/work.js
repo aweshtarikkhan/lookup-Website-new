@@ -2,13 +2,13 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Filter buttons
   const filterBtns = document.querySelectorAll('.work-filter-btn');
-  const items = document.querySelectorAll('.portfolio-card');
 
   filterBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       filterBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const cat = btn.getAttribute('data-filter');
+      const items = document.querySelectorAll('.portfolio-card');
       items.forEach((item, i) => {
         const show = cat === 'all' || item.getAttribute('data-category') === cat;
         item.style.opacity = '0';
@@ -23,12 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Modal
+  // Modal with event delegation
   const modal = document.querySelector('.project-modal');
   const modalContent = modal ? modal.querySelector('.modal-body') : null;
 
-  document.querySelectorAll('.portfolio-card').forEach(item => {
-    item.addEventListener('click', () => {
+  document.body.addEventListener('click', (e) => {
+    const item = e.target.closest('.portfolio-card');
+    if (item) {
       if (!modal || !modalContent) return;
       const title = item.getAttribute('data-title') || 'Project';
       const desc = item.getAttribute('data-description') || 'Project details coming soon.';
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       modal.classList.add('open');
       document.body.style.overflow = 'hidden';
-    });
+    }
   });
 
   if (modal) {

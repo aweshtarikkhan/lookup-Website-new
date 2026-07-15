@@ -14,19 +14,16 @@ const originalFetch = window.fetch;
 window.fetch = async function() {
   let [resource, config] = arguments;
   if (typeof resource === 'string' && resource.startsWith('/api/')) {
-    resource = 'http://localhost:3000' + resource; // Point to backend
     config = config || {};
     config.headers = config.headers || {};
     if (config.headers instanceof Headers) {
       config.headers.set('Authorization', 'Bearer ' + userToken);
-      config.headers.set('ngrok-skip-browser-warning', 'true');
     } else {
       config.headers['Authorization'] = 'Bearer ' + userToken;
-      config.headers['ngrok-skip-browser-warning'] = 'true';
     }
   }
   const response = await originalFetch(resource, config);
-  if (response.status === 401 && resource !== '/api/login') {
+  if (response.status === 401 && !resource.includes('/api/users/me')) {
     logout();
   }
   return response;
@@ -152,12 +149,26 @@ async function loadDashboard() {
 async function loadServices() {
   const data = await fetch('/api/services').then(r => r.json());
   const tbody = document.querySelector('#services-table tbody');
-  tbody.innerHTML = data.map(s => `<tr>
-    <td>${s.icon}</td><td>${s.name}</td>
-    <td>${formatCategory(s.category)}</td>
-    <td><span class="status-badge ${s.active ? 'status-active' : 'status-closed'}">${s.active ? 'Active' : 'Inactive'}</span></td>
-    <td><button class="action-btn" onclick="editService(${s.id})">✏️</button><button class="action-btn delete" onclick="deleteItem('services',${s.id})">🗑️</button></td>
-  </tr>`).join('');
+  
+  // Group by category
+  const groups = { 'digital-marketing': [], 'branding': [], 'development': [], 'other': [] };
+  data.forEach(s => {
+    if (groups[s.category]) groups[s.category].push(s);
+    else groups['other'].push(s);
+  });
+  
+  let html = '';
+  for (const [cat, services] of Object.entries(groups)) {
+    if (services.length === 0) continue;
+    html += `<tr><td colspan="5" style="background: rgba(255,255,255,0.05); padding: 10px 15px; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px;">${formatCategory(cat)} SERVICES</td></tr>`;
+    html += services.map(s => `<tr>
+      <td>${s.icon}</td><td>${s.name}</td>
+      <td>${formatCategory(s.category)}</td>
+      <td><span class="status-badge ${s.active ? 'status-active' : 'status-closed'}">${s.active ? 'Active' : 'Inactive'}</span></td>
+      <td><button class="action-btn" onclick="editService(${s.id})">✏️</button><button class="action-btn delete" onclick="deleteItem('services',${s.id})">🗑️</button></td>
+    </tr>`).join('');
+  }
+  tbody.innerHTML = html;
 }
 
 async function loadProjects() {
@@ -235,7 +246,7 @@ async function loadTestimonials() {
   const data = await fetch('/api/testimonials').then(r => r.json());
   const tbody = document.querySelector('#testimonials-table tbody');
   tbody.innerHTML = data.map(t => `<tr>
-    <td>${t.name}</td><td>${t.company || '-'}</td><td>${'★'.repeat(t.rating)}</td>
+    <td>${t.client_name}</td><td>${t.company || '-'}</td><td>${'★'.repeat(t.rating)}</td>
     <td><button class="action-btn" onclick="editTestimonial(${t.id})">✏️</button><button class="action-btn delete" onclick="deleteItem('testimonials',${t.id})">🗑️</button></td>
   </tr>`).join('');
 }
@@ -266,65 +277,59 @@ async function loadSettings() {
 let currentBrandsList = [];
 
 async function loadBrands() {
-  const settings = await fetch('/api/settings').then(r => r.json());
-  const defaultBrands = 'TechStart, RetailMax, EduLearn, HealthCare+, FinanceGo, GadgetPro, FoodChain, StyleHub';
-  const brandsStr = settings.trustedBrands || defaultBrands;
-  currentBrandsList = brandsStr.split(',').map(b => b.trim()).filter(b => b);
-  renderBrandsTable();
+  try {
+    const res = await fetch('/api/clients?t=' + new Date().getTime());
+    if (res.ok) {
+      currentBrandsList = await res.json();
+    } else {
+      currentBrandsList = [];
+    }
+    renderBrandsTable();
+  } catch (e) {
+    console.error("Failed to load clients", e);
+  }
 }
 
 function renderBrandsTable() {
   const tbody = document.querySelector('#brands-table tbody');
   if (currentBrandsList.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="2" style="text-align:center;">No brands added yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No brands added yet.</td></tr>';
     return;
   }
   
   tbody.innerHTML = currentBrandsList.map((brand, index) => `
     <tr>
-      <td><b>${brand}</b></td>
       <td>
-        <button class="action-btn" style="color:#10b981;" onclick="promptEditBrand(${index})" title="Edit">✏️</button>
+        ${brand.logo_url ? `<img src="${brand.logo_url}" style="height: 40px; max-width: 120px; object-fit: contain; background: #1e293b; padding: 4px; border-radius: 4px;">` : 'No Logo'}
+      </td>
+      <td><b>${brand.name || 'Unnamed'}</b></td>
+      <td>
+        <button class="action-btn" style="color:#10b981;" onclick="editBrand(${index})" title="Edit">✏️</button>
         <button class="action-btn delete" onclick="deleteBrand(${index})" title="Delete">🗑️</button>
       </td>
     </tr>
   `).join('');
 }
 
-async function promptAddBrand() {
-  const brandName = prompt("Enter new brand name:");
-  if (brandName && brandName.trim()) {
-    currentBrandsList.push(brandName.trim());
-    await saveBrandsList();
-  }
-}
-
-async function promptEditBrand(index) {
-  const brandName = prompt("Edit brand name:", currentBrandsList[index]);
-  if (brandName && brandName.trim()) {
-    currentBrandsList[index] = brandName.trim();
-    await saveBrandsList();
-  }
+function editBrand(index) {
+  const item = currentBrandsList[index];
+  openModal('brand', item);
 }
 
 async function deleteBrand(index) {
-  if (confirm(`Are you sure you want to remove "${currentBrandsList[index]}"?`)) {
-    currentBrandsList.splice(index, 1);
-    await saveBrandsList();
-  }
-}
-
-async function saveBrandsList() {
-  const val = currentBrandsList.join(', ');
-  const settings = await fetch('/api/settings?t=' + new Date().getTime()).then(r => r.json());
-  settings.trustedBrands = val;
-  try {
-    const response = await fetch('/api/settings', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)});
-    if (!response.ok) throw new Error("Server error");
-    showToast('Leading Brands saved successfully!', 'success');
-    renderBrandsTable();
-  } catch(err) {
-    showToast('Failed to save brands.', 'error');
+  const item = currentBrandsList[index];
+  if (confirm(`Are you sure you want to remove "${item.name}"?`)) {
+    try {
+      const response = await fetch(`/api/clients/${item.id}`, { method: 'DELETE' });
+      if (response.ok) {
+        showToast('Brand deleted successfully!', 'success');
+        await loadBrands();
+      } else {
+        showToast('Failed to delete brand.', 'error');
+      }
+    } catch (e) {
+      showToast('Error deleting brand.', 'error');
+    }
   }
 }
 
@@ -455,7 +460,17 @@ function openModal(type, data = null) {
   const form = document.getElementById('modal-form');
   let fields = '';
 
-  if (type === 'service') {
+  if (type === 'brand') {
+    title.textContent = data ? 'Edit Brand' : 'Add Brand';
+    fields = `
+      <div class="form-group"><label>Brand Name</label><input class="form-control" name="name" value="${data?.name||''}" required></div>
+      <div class="form-group">
+        <label>Logo Image</label>
+        <input type="file" class="form-control" name="image" accept="image/*" ${data ? '' : 'required'}>
+        ${data?.logo_url ? `<p style="margin-top:8px;">Current Logo: <br><img src="${data.logo_url}" style="height:40px; max-width:120px; object-fit:contain; background:#1e293b; padding:4px; border-radius:4px; margin-top:4px;"></p>` : ''}
+      </div>
+      <button type="submit" class="btn-submit">${data?'Update':'Add'} Brand</button>`;
+  } else if (type === 'service') {
     title.textContent = data ? 'Edit Service' : 'Add Service';
     fields = `
       <div class="form-group"><label>Name</label><input class="form-control" name="name" value="${data?.name||''}" required></div>
@@ -467,8 +482,13 @@ function openModal(type, data = null) {
     title.textContent = data ? 'Edit Project' : 'Add Project';
     fields = `
       <div class="form-group"><label>Title</label><input class="form-control" name="title" value="${data?.title||''}" required></div>
-      <div class="form-group"><label>Category</label><select class="form-control" name="category"><option value="website">Website</option><option value="app">App</option><option value="branding">Branding</option><option value="video">Video</option><option value="social-media">Social Media</option><option value="marketing">Marketing</option></select></div>
+      <div class="form-group"><label>Category</label><select class="form-control" name="category"><option value="website" ${data?.category==='website'?'selected':''}>Website</option><option value="app" ${data?.category==='app'?'selected':''}>App</option><option value="branding" ${data?.category==='branding'?'selected':''}>Branding</option><option value="video" ${data?.category==='video'?'selected':''}>Video</option><option value="social-media" ${data?.category==='social-media'?'selected':''}>Social Media</option><option value="marketing" ${data?.category==='marketing'?'selected':''}>Marketing</option></select></div>
       <div class="form-group"><label>Client</label><input class="form-control" name="client" value="${data?.client||''}"></div>
+      <div class="form-group">
+        <label>Project Image</label>
+        <input type="file" class="form-control" name="image" accept="image/*">
+        ${data?.image ? `<p style="margin-top:8px;">Current Image: <br><img src="${data.image}" style="height:50px; max-width:150px; object-fit:contain; border-radius:4px; margin-top:4px;"></p>` : ''}
+      </div>
       <div class="form-group"><label>Description</label><textarea class="form-control" name="description">${data?.description||''}</textarea></div>
       <button type="submit" class="btn-submit">${data?'Update':'Add'} Project</button>`;
   } else if (type === 'team') {
@@ -476,15 +496,20 @@ function openModal(type, data = null) {
     fields = `
       <div class="form-group"><label>Name</label><input class="form-control" name="name" value="${data?.name||''}" required></div>
       <div class="form-group"><label>Role</label><input class="form-control" name="role" value="${data?.role||''}"></div>
+      <div class="form-group">
+        <label>Member Photo</label>
+        <input type="file" class="form-control" name="image" accept="image/*">
+        ${data?.image ? `<p style="margin-top:8px;">Current Photo: <br><img src="${data.image}" style="height:50px; max-width:150px; object-fit:contain; border-radius:4px; margin-top:4px;"></p>` : ''}
+      </div>
       <div class="form-group"><label>Bio</label><textarea class="form-control" name="bio">${data?.bio||''}</textarea></div>
       <button type="submit" class="btn-submit">${data?'Update':'Add'} Member</button>`;
   } else if (type === 'testimonial') {
     title.textContent = data ? 'Edit Testimonial' : 'Add Testimonial';
     fields = `
-      <div class="form-group"><label>Name</label><input class="form-control" name="name" value="${data?.name||''}" required></div>
+      <div class="form-group"><label>Name</label><input class="form-control" name="client_name" value="${data?.client_name||''}" required></div>
       <div class="form-group"><label>Company</label><input class="form-control" name="company" value="${data?.company||''}"></div>
       <div class="form-group"><label>Rating (1-5)</label><input type="number" min="1" max="5" class="form-control" name="rating" value="${data?.rating||5}"></div>
-      <div class="form-group"><label>Review Text</label><textarea class="form-control" name="text">${data?.text||''}</textarea></div>
+      <div class="form-group"><label>Review Text</label><textarea class="form-control" name="feedback">${data?.feedback||''}</textarea></div>
       <button type="submit" class="btn-submit">${data?'Update':'Add'} Testimonial</button>`;
   } else if (type === 'quotation') {
     title.textContent = data ? 'Edit Quotation' : 'Create New Quotation';
@@ -554,25 +579,66 @@ function closeModal() {
 async function handleModalSubmit(e) {
   e.preventDefault();
   const form = document.getElementById('modal-form');
-  const formData = Object.fromEntries(new FormData(form));
-  const endpoints = {service:'services',project:'projects',team:'team',testimonial:'testimonials',quotation:'quotations',user:'users'};
+  const endpoints = {service:'services',project:'projects',team:'team',testimonial:'testimonials',quotation:'quotations',user:'users',brand:'clients'};
   const endpoint = endpoints[editingType];
-
-  if (formData.rating) formData.rating = parseInt(formData.rating);
-  if (formData.subtotal) {
-    formData.subtotal = parseInt(formData.subtotal);
-    formData.gst = Math.round(formData.subtotal * 0.18);
-    formData.totalAmount = formData.subtotal + formData.gst;
-  }
 
   try {
     let resultData;
     let response;
+    const hasFiles = ['project', 'team', 'brand'].includes(editingType);
     
-    if (editingId) {
-      response = await fetch(`/api/${endpoint}/${editingId}`, {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(formData)});
+    if (hasFiles) {
+      const formData = new FormData(form);
+      if (editingId) {
+        response = await fetch(`/api/${endpoint}/${editingId}`, {
+          method: 'PUT',
+          body: formData
+        });
+      } else {
+        response = await fetch(`/api/${endpoint}`, {
+          method: 'POST',
+          body: formData
+        });
+      }
     } else {
-      response = await fetch(`/api/${endpoint}`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(formData)});
+      let formData = Object.fromEntries(new FormData(form));
+      if (formData.rating) formData.rating = parseInt(formData.rating);
+      
+      // Handle Quotation specific mapping to match DB schema
+      if (editingType === 'quotation') {
+        const payload = {
+          name: formData.name || '',
+          email: formData.email || '',
+          phone: formData.phone || '',
+          service: formData.service || '',
+          details: formData.description || '', // Map description to details
+          totalAmount: formData.subtotal ? Math.round(parseInt(formData.subtotal) * 1.18) : 0
+        };
+        // Generate qtNo for new quotations if needed
+        if (!editingId) {
+          payload.qtNo = 'QT-' + Math.floor(1000 + Math.random() * 9000);
+          payload.status = 'pending';
+        }
+        formData = payload;
+      } else if (formData.subtotal) {
+        // Just in case other types use subtotal
+        formData.subtotal = parseInt(formData.subtotal);
+        formData.gst = Math.round(formData.subtotal * 0.18);
+        formData.totalAmount = formData.subtotal + formData.gst;
+      }
+      if (editingId) {
+        response = await fetch(`/api/${endpoint}/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      } else {
+        response = await fetch(`/api/${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+      }
     }
     
     const contentType = response.headers.get("content-type");
@@ -757,6 +823,11 @@ async function viewQuotation(id) {
   document.getElementById('q-doc-valid').textContent = formattedValid;
   document.getElementById('q-doc-for').textContent = q.service || 'Digital Services';
   
+  // Convert totalAmount to subtotal and GST
+  const total = q.totalAmount || 0;
+  const subtotal = Math.round(total / 1.18);
+  const gst = total - subtotal;
+
   // Render Services based on inputs
   let servicesHtml = '';
   
@@ -766,21 +837,21 @@ async function viewQuotation(id) {
     <tr>
       <td>1</td>
       <td><b>${q.service || 'Digital Services'}</b></td>
-      <td style="white-space: pre-line;">${q.description || 'Comprehensive management & optimization'}</td>
+      <td style="white-space: pre-line;">${q.details || 'Comprehensive management & optimization'}</td>
       <td>One Time / Monthly</td>
-      <td style="text-align:right;">₹ ${q.subtotal.toLocaleString('en-IN')}</td>
+      <td style="text-align:right;">₹ ${subtotal.toLocaleString('en-IN')}</td>
     </tr>
   `;
   
   document.getElementById('q-services-body').innerHTML = servicesHtml;
   
   // Calculate Totals
-  document.getElementById('q-subtotal').textContent = '₹ ' + q.subtotal.toLocaleString('en-IN');
-  document.getElementById('q-gst').textContent = '₹ ' + q.gst.toLocaleString('en-IN');
-  document.getElementById('q-total').textContent = '₹ ' + q.totalAmount.toLocaleString('en-IN');
+  document.getElementById('q-subtotal').textContent = '₹ ' + subtotal.toLocaleString('en-IN');
+  document.getElementById('q-gst').textContent = '₹ ' + gst.toLocaleString('en-IN');
+  document.getElementById('q-total').textContent = '₹ ' + total.toLocaleString('en-IN');
   
   // Convert number to words
-  document.getElementById('q-amount-words-text').textContent = numberToWords(q.totalAmount) + ' Only.';
+  document.getElementById('q-amount-words-text').textContent = numberToWords(total) + ' Only.';
 }
 
 function numberToWords(num) {
