@@ -8,6 +8,11 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 
+// Polyfill WebSocket for Node.js < 22 (needed for @supabase/realtime-js)
+if (typeof WebSocket === 'undefined') {
+  global.WebSocket = require('ws');
+}
+
 const { initDB, getDB } = require('./database-wasm');
 
 const app = express();
