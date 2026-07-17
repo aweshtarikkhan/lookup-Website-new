@@ -85,7 +85,7 @@
 .trusted { padding:60px 0; border-top:1px solid var(--glass-border); border-bottom:1px solid var(--glass-border); overflow:hidden; }
 .trusted p { text-align:center; color:var(--gray-500); font-size:0.85rem; text-transform:uppercase; letter-spacing:3px; margin-bottom:32px; }
 .trusted-scroll { display:flex; gap:60px; animation: scroll-x 30s linear infinite; width:max-content; }
-.trusted-scroll .logo-item { font-family:var(--font-heading); font-size:3.5rem; font-weight:900; color:var(--primary); white-space:nowrap; opacity:0.85; transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; cursor: pointer; padding: 0 15px; }
+.trusted-scroll .logo-item { font-family:var(--font-heading); font-size:3.5rem !important; font-weight:900; color:var(--primary) !important; white-space:nowrap; opacity:0.85; transition:all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; cursor: pointer; padding: 0 20px; }
 .trusted-scroll .logo-item:hover { opacity:1; transform: scale(1.25); text-shadow: 0 8px 25px rgba(220, 38, 38, 0.3); color: var(--primary-dark, #b91c1c); }
 .trusted-scroll:hover { animation-play-state: paused; }
 @keyframes scroll-x { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
