@@ -485,7 +485,7 @@ async function applyCMSContent() {
           if (scrollDiv) {
             const brandsHtml = brands.map(b => `
               <span class="logo-item">
-                ${b.logo_url ? `<img src="${b.logo_url}" alt="${b.name || 'Client logo'}" style="height: 50px; max-width: 150px; object-fit: contain;">` : b.name}
+                ${b.logo_url ? `<img src="${b.logo_url}" alt="${b.name || 'Client logo'}" style="height: 90px; max-width: 240px; object-fit: contain;">` : b.name}
               </span>
             `).join('');
             scrollDiv.innerHTML = brandsHtml + brandsHtml;
