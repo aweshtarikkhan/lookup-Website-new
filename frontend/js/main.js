@@ -320,20 +320,21 @@ async function loadDynamicContent() {
       if (res.ok) {
         const testimonials = await res.json();
         if (testimonials && testimonials.length > 0) {
-          tContainer.innerHTML = testimonials.map(t => `
-            <div class="glass-card testimonial-card">
-              <div class="quote">"</div>
-              <div class="stars">${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}</div>
-              <p>${t.feedback}</p>
-              <div class="testimonial-author">
-                <div class="testimonial-avatar">${t.client_name.charAt(0).toUpperCase()}</div>
-                <div class="testimonial-info">
-                  <div class="name">${t.client_name}</div>
-                  <div class="company">${t.company || 'Client'}</div>
+            const tHtml = testimonials.map(t => `
+              <div class="glass-card testimonial-card">
+                <div class="quote">"</div>
+                <div class="stars">${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}</div>
+                <p>${t.feedback}</p>
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar">${t.client_name.charAt(0).toUpperCase()}</div>
+                  <div class="testimonial-info">
+                    <div class="name">${t.client_name}</div>
+                    <div class="company">${t.company || 'Client'}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          `).join('');
+            `).join('');
+            tContainer.innerHTML = tHtml + tHtml;
         }
       }
     }
