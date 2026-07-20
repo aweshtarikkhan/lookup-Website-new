@@ -10,8 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Preloader
   const preloader = document.querySelector('.preloader');
   if (preloader) {
-    window.addEventListener('load', () => setTimeout(() => preloader.classList.add('hidden'), 800));
-    setTimeout(() => preloader.classList.add('hidden'), 3000); // fallback
+    window.addEventListener('load', () => setTimeout(() => {
+      preloader.classList.add('hidden');
+      sessionStorage.setItem('lookupp_visited', 'true');
+    }, 800));
+    setTimeout(() => {
+      preloader.classList.add('hidden');
+      sessionStorage.setItem('lookupp_visited', 'true');
+    }, 3000); // fallback
   }
 
   // Force page to load at the top
