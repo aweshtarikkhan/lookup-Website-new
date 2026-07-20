@@ -106,11 +106,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Testimonial auto-scroll setup
   const sliderWrapper = document.querySelector('.testimonial-slider-wrapper');
+  window.isSliderHovered = false;
+  window.sliderPauseTimeout = null;
+
   if (sliderWrapper) {
-    let autoScroll = setInterval(() => scrollTestimonials(1), 3000);
-    sliderWrapper.addEventListener('mouseenter', () => clearInterval(autoScroll));
+    let scrollSpeed = 0.5; // pixels per frame
+    let animationId;
+
+    const continuousScroll = () => {
+      if (!window.isSliderHovered) {
+        sliderWrapper.scrollLeft += scrollSpeed;
+        
+        // Loop back if we've scrolled past the content
+        if (sliderWrapper.scrollLeft >= sliderWrapper.scrollWidth / 2) {
+          sliderWrapper.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(continuousScroll);
+    };
+
+    // Start animation
+    animationId = requestAnimationFrame(continuousScroll);
+
+    sliderWrapper.addEventListener('mouseenter', () => window.isSliderHovered = true);
     sliderWrapper.addEventListener('mouseleave', () => {
-      autoScroll = setInterval(() => scrollTestimonials(1), 3000);
+      if (!window.sliderPauseTimeout) window.isSliderHovered = false;
     });
   }
 });
@@ -118,6 +138,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function scrollTestimonials(direction) {
   const wrapper = document.querySelector('.testimonial-slider-wrapper');
   if (!wrapper) return;
+  
+  // Pause continuous scroll during manual scroll
+  window.isSliderHovered = true;
+  if (window.sliderPauseTimeout) clearTimeout(window.sliderPauseTimeout);
+  
+  window.sliderPauseTimeout = setTimeout(() => {
+    window.sliderPauseTimeout = null;
+    window.isSliderHovered = false;
+  }, 1000); // Resume after 1 second (allows smooth scroll to finish)
+
   const cardWidth = 350 + 24; // Card width + gap
   wrapper.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
 }
