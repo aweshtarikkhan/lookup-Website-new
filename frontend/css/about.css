@@ -16,7 +16,7 @@
 .cta-section { text-align: center; }
 .cta-btns { justify-content: center; display: flex; gap: 16px; margin-top: 20px; }
 .team-grid-wrapper { position: relative; display: flex; align-items: center; margin: 0 -20px; padding: 0 20px; }
-.team-grid { display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; scroll-behavior:smooth; }
+.team-grid { display:flex; gap:24px; overflow-x:auto; overflow-y:visible; padding: 20px 10px; margin: -20px -10px; scroll-snap-type:x mandatory; scrollbar-width:none; -ms-overflow-style:none; scroll-behavior:smooth; }
 .team-grid::-webkit-scrollbar { display:none; }
 .team-card { text-align:center; padding:32px 20px; min-width:280px; flex-shrink:0; scroll-snap-align:start; position:relative; }
 .team-slider-btn { position: absolute; z-index: 10; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(227,30,36,0.3); }
