@@ -30,6 +30,7 @@
         
         <div class="sidebar-divider admin-nav"></div>
         <a href="#" class="nav-item admin-nav" data-section="content" id="nav-content">📄 Website Content</a>
+        <a href="#" class="nav-item admin-nav" data-section="images" id="nav-images">🖼️ Update Images</a>
         <a href="#" class="nav-item admin-nav" data-section="settings" id="nav-settings">🔧 Site Settings</a>
         <a href="#" class="nav-item admin-nav" data-section="users" id="nav-users">🔐 Manage Users</a>
         
@@ -110,6 +111,45 @@
         </div>
 
         <!-- Page Content -->
+        <div class="section" id="section-images">
+          <div class="section-toolbar">
+            <h3>Update Website Images</h3>
+          </div>
+          
+          <div class="glass-card" style="padding: 24px; max-width: 600px;">
+            <div style="background: rgba(37, 99, 235, 0.1); border-left: 4px solid var(--primary); padding: 12px; margin-bottom: 24px; border-radius: 4px; font-size: 0.95rem;">
+              <strong>Note:</strong> For best results, please upload an image in a <strong>4:3 aspect ratio</strong> (e.g., 800x600 px or 1024x768 px).
+            </div>
+
+            <form id="image-upload-form" onsubmit="uploadCMSImage(event)">
+              <div class="form-group">
+                <label>Select Target Image to Update</label>
+                <select id="image-target-select" class="form-control" required onchange="loadImagePreview()">
+                  <option value="">-- Select Image --</option>
+                  <option value="home.about.image">Home Page - About Us Image</option>
+                  <option value="about.whoWeAre.image">About Us Page - Who We Are Image</option>
+                </select>
+              </div>
+              
+              <div class="form-group" id="image-preview-group" style="display:none; margin: 20px 0;">
+                <label>Current Image Preview</label>
+                <div>
+                  <img id="cms-image-preview" src="" alt="Preview" style="max-width: 100%; max-height: 250px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--glass-bg); object-fit: contain;">
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 20px;">
+                <label>Upload New Image</label>
+                <input type="file" id="cms-image-file" class="form-control" accept="image/*" required>
+              </div>
+
+              <div style="margin-top: 24px;">
+                <button type="submit" class="btn btn-primary" id="btn-upload-image">Upload & Save Image</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <div class="section" id="section-content">
           <div class="section-toolbar"><h3>Manage Website Content</h3></div>
           <div class="card" style="max-width:800px;">

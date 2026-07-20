@@ -500,14 +500,28 @@ async function applyCMSContent() {
         }
       });
       
-      document.querySelectorAll('[data-cms-src]').forEach(el => {
-        const path = el.getAttribute('data-cms-src').split('.');
+      document.querySelectorAll('[data-cms-src], [data-cms-img]').forEach(el => {
+        const attr = el.hasAttribute('data-cms-img') ? 'data-cms-img' : 'data-cms-src';
+        const path = el.getAttribute(attr).split('.');
         let val = content;
         for(let p of path) {
           if(val) val = val[p];
         }
         if(val !== undefined && val !== null && val !== '') {
           el.setAttribute('src', val);
+          if (attr === 'data-cms-img') {
+            const placeholder = el.nextElementSibling;
+            if (placeholder && placeholder.classList.contains('placeholder-art')) {
+              placeholder.style.display = 'none';
+            }
+          }
+        } else if (attr === 'data-cms-img') {
+          // No image uploaded, show placeholder
+          el.style.display = 'none';
+          const placeholder = el.nextElementSibling;
+          if (placeholder && placeholder.classList.contains('placeholder-art')) {
+            placeholder.style.display = 'block';
+          }
         }
       });
       

@@ -118,6 +118,7 @@ async function loadSectionData(section) {
     case 'testimonials': await loadTestimonials(); break;
     case 'settings': await loadSettings(); break;
     case 'content': await loadContentData(); break;
+    case 'images': await loadContentData(); break;
     case 'brands': await loadBrands(); break;
   }
 }
@@ -452,7 +453,89 @@ async function saveContent(e) {
   }
 }
 
-// --- Modals ---
+// --- CMS Images Logic ---
+function loadImagePreview() {
+  const select = document.getElementById('image-target-select');
+  const previewGroup = document.getElementById('image-preview-group');
+  const previewImg = document.getElementById('cms-image-preview');
+  
+  if (!select.value) {
+    previewGroup.style.display = 'none';
+    return;
+  }
+  
+  const [page, section, field] = select.value.split('.');
+  if (websiteContent[page] && websiteContent[page][section] && websiteContent[page][section][field]) {
+    previewImg.src = websiteContent[page][section][field];
+    previewGroup.style.display = 'block';
+  } else {
+    previewGroup.style.display = 'none';
+  }
+}
+
+async function uploadCMSImage(e) {
+  e.preventDefault();
+  const select = document.getElementById('image-target-select');
+  const fileInput = document.getElementById('cms-image-file');
+  const btn = document.getElementById('btn-upload-image');
+  
+  if (!select.value || !fileInput.files[0]) return;
+  
+  const originalText = btn.textContent;
+  btn.textContent = 'Uploading...';
+  btn.disabled = true;
+  
+  try {
+    const formData = new FormData();
+    formData.append('image', fileInput.files[0]);
+    formData.append('folder', 'images'); // optional
+    
+    const token = localStorage.getItem('lookupp_token') || localStorage.getItem('supabase.auth.token');
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    
+    const uploadRes = await fetch('/api/upload-image', {
+      method: 'POST',
+      headers,
+      body: formData
+    });
+    
+    if (!uploadRes.ok) throw new Error('Upload failed');
+    const uploadData = await uploadRes.json();
+    const imageUrl = uploadData.url;
+    
+    // Update websiteContent locally
+    const [page, section, field] = select.value.split('.');
+    if (!websiteContent[page]) websiteContent[page] = {};
+    if (!websiteContent[page][section]) websiteContent[page][section] = {};
+    websiteContent[page][section][field] = imageUrl;
+    
+    // Save to backend
+    const saveRes = await fetch('/api/content', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify(websiteContent)
+    });
+    
+    if (saveRes.ok) {
+      showToast('Image updated successfully! Changes reflect on the website instantly.', 'success');
+      loadImagePreview();
+      fileInput.value = '';
+    } else {
+      showToast('Failed to save image to CMS.', 'error');
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('An error occurred during upload.', 'error');
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+}
+
+// --- CRUD Functions (Brands) ---
 function openModal(type, data = null) {
   editingType = type;
   editingId = data ? data.id : null;

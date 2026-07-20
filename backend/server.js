@@ -382,6 +382,14 @@ app.put('/api/content', async (req, res) => {
     res.json({ success: true, data: req.body });
   } catch(e) { res.status(500).json({error:e.message}); }
 });
+// --- Content Image Upload ---
+app.post('/api/upload-image', upload.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No image uploaded' });
+  // Since we save it in frontend/uploads, we return /uploads/images/...
+  // To keep it simple, we can just use the 'general' folder if it wasn't specified.
+  // Wait, the multer config already puts it in 'general' if not matched.
+  return res.json({ url: `/uploads/general/${req.file.filename}` });
+});
 
 // --- Stats ---
 app.get('/api/stats', async (req, res) => {
