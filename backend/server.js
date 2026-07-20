@@ -76,8 +76,15 @@ async function authMiddleware(req, res, next) {
   try {
     const { data: { user: supaUser }, error: supaError } = await supabase.auth.getUser(token);
     if (!supaError && supaUser) {
-      const dbUser = await db.get(`SELECT * FROM users WHERE email = ?`, [supaUser.email]);
-      req.user = dbUser || { id: supaUser.id, email: supaUser.email, name: supaUser.user_metadata?.full_name || '', role: 'user' };
+      let dbUser = await db.get(`SELECT * FROM users WHERE email = ?`, [supaUser.email]);
+      
+      if (!dbUser) {
+        const name = supaUser.user_metadata?.full_name || supaUser.email.split('@')[0];
+        const result = await db.run(`INSERT INTO users (name, email, role, password) VALUES (?, ?, 'user', '')`, [name, supaUser.email]);
+        dbUser = await db.get(`SELECT * FROM users WHERE id = ?`, [result.lastID]);
+      }
+      
+      req.user = dbUser;
       return next();
     }
   } catch (e) {}

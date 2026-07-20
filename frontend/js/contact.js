@@ -3,6 +3,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  // Pre-fill if logged in
+  try {
+    const sbData = localStorage.getItem('sb-zctqovddntgoyjrtxyqf-auth-token');
+    if (sbData) {
+      const parsed = JSON.parse(sbData);
+      const user = parsed.user;
+      if (user && user.email) {
+        const emailInput = form.querySelector('[name="email"]');
+        if (emailInput) {
+          emailInput.value = user.email;
+          emailInput.readOnly = true;
+          emailInput.style.background = '#f9f9f9';
+          emailInput.style.color = '#777';
+          emailInput.style.cursor = 'not-allowed';
+        }
+        const nameInput = form.querySelector('[name="name"]');
+        if (nameInput && user.user_metadata && user.user_metadata.full_name) {
+          nameInput.value = user.user_metadata.full_name;
+        }
+      }
+    }
+  } catch(e) {}
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
