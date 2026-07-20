@@ -301,7 +301,7 @@ function checkLoginState() {
         `;
       }
       if (cta) {
-        cta.appendChild(menuHTML);
+        cta.insertBefore(menuHTML, cta.firstChild);
       } else {
         inner.appendChild(menuHTML);
       }
