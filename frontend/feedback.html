@@ -151,7 +151,135 @@
   <div class="floating-buttons"><button class="float-btn top">↑</button><a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" class="float-btn whatsapp" aria-label="WhatsApp" data-cms-href="contact.social.whatsapp"><svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 3.4C18.3 1.2 15.3 0 12.1 0C5.5 0 0.1 5.4 0.1 12C0.1 14.1 0.7 16.2 1.7 18L0 24L6.1 22.4C7.9 23.3 9.9 23.8 12 23.8H12.1C18.6 23.8 24 18.4 24 11.9C24 8.7 22.7 5.7 20.5 3.4ZM12.1 21.8H12C10.2 21.8 8.4 21.3 6.9 20.4L6.6 20.2L2.9 21.2L3.9 17.6L3.7 17.2C2.7 15.6 2.1 13.8 2.1 11.9C2.1 6.5 6.6 2 12.1 2C14.7 2 17.2 3.1 19 4.9C20.8 6.7 21.9 9.2 21.9 11.9C21.9 17.4 17.5 21.8 12.1 21.8ZM17.6 14.3C17.3 14.1 15.8 13.4 15.5 13.3C15.2 13.2 15 13.1 14.8 13.4C14.6 13.7 14 14.4 13.8 14.6C13.6 14.8 13.4 14.8 13.1 14.7C12.8 14.5 11.7 14.2 10.5 13.1C9.6 12.3 9 11.2 8.8 10.9C8.6 10.6 8.8 10.4 9 10.3C9.1 10.1 9.3 9.9 9.4 9.7C9.6 9.5 9.6 9.4 9.7 9.2C9.8 8.9 9.8 8.8 9.7 8.6C9.6 8.5 9 7 8.7 6.4C8.5 5.8 8.2 5.9 8.1 5.9C7.9 5.9 7.7 5.9 7.5 5.9C7.3 5.9 6.9 6 6.6 6.3C6.3 6.6 5.5 7.4 5.5 8.9C5.5 10.4 6.6 11.9 6.8 12.1C6.9 12.3 9 15.5 12.2 16.9C12.9 17.2 13.5 17.4 14 17.5C14.7 17.7 15.4 17.7 15.9 17.6C16.5 17.5 17.7 16.9 18 16.2C18.2 15.5 18.2 14.9 18.1 14.7C18 14.6 17.8 14.5 17.6 14.3Z" /></svg></a></div>
 
   <!-- Login Modal -->
-  <div class="login-modal-overlay" id="login-modal"><div class="login-modal"><div class="login-modal-header"><h2>Welcome <span class="text-primary">Back</span></h2><p>Login to your LookUPp client account</p><button class="login-modal-close" onclick="closeLoginModal()">✕</button></div><div class="login-tabs"><button class="login-tab active" data-tab="login">Login</button><button class="login-tab" data-tab="signup">Sign Up</button></div><div class="login-tab-content active" id="tab-login"><form id="login-form" onsubmit="handleLogin(event)"><div class="form-group"><label>Email Address *</label><input type="email" class="form-control" placeholder="your@email.com" required></div><div class="form-group"><label>Password *</label><input type="password" class="form-control" placeholder="Enter your password" required></div><div class="login-extras"><label><input type="checkbox"> Remember me</label><a href="#">Forgot password?</a></div><div class="form-group"><button type="submit" class="login-submit-btn">Login →</button></div></form><div class="login-divider">or continue with</div><div class="social-login-btns"><button class="social-login-btn" type="button">📧 Google</button><button class="social-login-btn" type="button">📘 Facebook</button></div></div><div class="login-tab-content" id="tab-signup"><form id="signup-form" onsubmit="handleSignup(event)"><div class="form-group"><label>Full Name *</label><input type="text" class="form-control" placeholder="Your full name" required></div><div class="form-group"><label>Email Address *</label><input type="email" class="form-control" placeholder="your@email.com" required></div><div class="form-group"><label>Phone Number *</label><input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX" required></div><div class="form-group"><label>Password *</label><input type="password" class="form-control" placeholder="Create a password" required></div><div class="form-group"><button type="submit" class="login-submit-btn">Create Account →</button></div></form></div></div></div>
+  <div class="login-modal-overlay" id="login-modal">
+    <div class="login-modal" style="text-align:center; padding: 30px 40px; max-width: 650px; width: 90%;">
+      <div class="login-modal-header" style="border:none; padding-bottom: 0;">
+        <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:5px;">Kickstart Your <span class="text-primary">Growth</span></h2>
+        <p style="color:#64748b; font-size:0.95rem;">Connect your brand with our team of digital experts.</p>
+        <button class="login-modal-close" onclick="closeLoginModal()">✕</button>
+      </div>
+
+      <div class="login-tabs">
+        <button class="login-tab active" data-tab="login" onclick="switchTab('login')">Login</button>
+        <button class="login-tab" data-tab="signup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN TAB -->
+      <div class="login-tab-content active" id="tab-login" style="padding-top: 20px;">
+        <form id="login-form" onsubmit="handleEmailLogin(event)">
+          <div class="form-group" style="margin-bottom:12px;">
+            <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Email Address</label>
+            <input type="email" id="login-email" class="form-control" placeholder="your@email.com" required style="padding:10px 14px;">
+          </div>
+          <div class="form-group" style="margin-bottom:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:0; text-align:left;">Password</label>
+              <a href="#" onclick="showForgotPassword(event)" style="font-size:0.75rem; color:var(--primary); text-decoration:none;">Forgot?</a>
+            </div>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required style="padding:10px 14px;">
+          </div>
+          <button type="submit" id="btn-login-submit" class="login-submit-btn" style="border-radius:8px; padding:12px;">Login to Portal 🚀</button>
+        </form>
+
+        <div class="login-divider" style="margin:15px 0;">Or continue with</div>
+        <div class="social-login-btns">
+          <button class="social-login-btn" onclick="mainSiteOAuth('google')">
+            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+        </div>
+      </div>
+
+      <!-- SIGNUP TAB -->
+      <div class="login-tab-content" id="tab-signup" style="padding-top: 20px;">
+        <form id="signup-form" onsubmit="handleSignup(event)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Your Name</label>
+              <input type="text" id="signup-name" class="form-control" placeholder="John Doe" required style="padding:10px 14px;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Brand / Domain</label>
+              <input type="text" id="signup-brand" class="form-control" placeholder="yourbrand.com" required style="padding:10px 14px;">
+            </div>
+          </div>
+          
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Work Email Address</label>
+              <input type="email" id="signup-email" class="form-control" placeholder="ceo@yourbrand.com" required style="padding:10px 14px;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Primary Growth Goal</label>
+              <select id="signup-goal" class="form-control" required style="padding:10px 14px;">
+                <option value="" disabled selected>Select Main Objective</option>
+                <option value="digital_marketing">Digital Marketing & SEO</option>
+                <option value="web_dev">Website / Web App Development</option>
+                <option value="mobile_app">Mobile App Development</option>
+                <option value="branding">Creative Branding & Design</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Phone Number</label>
+              <input type="tel" id="signup-phone" class="form-control" placeholder="+91 9876543210" required style="padding:10px 14px;">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; text-align:left;">Create Portal Password</label>
+              <input type="password" id="signup-password" class="form-control" placeholder="Min 8 chars" minlength="8" required style="padding:10px 14px;">
+            </div>
+          </div>
+
+          <button type="submit" id="btn-signup-submit" class="login-submit-btn" style="border-radius:8px; padding:12px;">Submit Application & Claim Consultation 🚀</button>
+        </form>
+
+        <div class="login-divider" style="margin:15px 0;">Or sign up with</div>
+        <div class="social-login-btns">
+          <button class="social-login-btn" onclick="mainSiteOAuth('google')">
+            <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Sign up with Google
+          </button>
+        </div>
+      </div>
+
+      <!-- OTP VERIFICATION TAB -->
+      <div class="login-tab-content" id="tab-otp" style="padding-top: 20px;">
+        <form id="otp-form" onsubmit="handleOtpVerification(event)">
+          <div class="form-group" style="margin-bottom:20px;">
+            <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; display:block; text-align:left;">Enter Verification Code</label>
+            <p style="color:#64748b; font-size:0.88rem; line-height:1.5; margin-bottom:16px; text-align:left;" id="otp-instructions">
+              Please enter the 6-digit OTP code sent to your email.
+            </p>
+            <input type="text" id="otp-code" class="form-control" placeholder="000000" pattern="\d{6}" maxlength="6" required 
+                   style="padding:12px 16px; text-align:center; font-size:1.8rem; letter-spacing:8px; font-weight:700; font-family:var(--font-heading); background:#f8f8fa; border:1px solid rgba(0,0,0,0.1); border-radius:8px;">
+          </div>
+          <button type="submit" id="btn-otp-submit" class="login-submit-btn" style="border-radius:8px; padding:12px; font-weight:600; font-size:0.95rem; cursor:pointer;">Verify OTP & Log In 🚀</button>
+          <div style="margin-top:20px; display:flex; justify-content:space-between; font-size:0.85rem; font-weight:500;">
+            <a href="#" onclick="resendOtp(event)" style="color:var(--primary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;" id="btn-resend-otp">🔄 Resend OTP</a>
+            <a href="#" onclick="switchTab('login')" style="color:#64748b; text-decoration:none;">← Back to Login</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- NEW PASSWORD TAB (For Recovery) -->
+      <div class="login-tab-content" id="tab-new-password" style="padding-top: 20px;">
+        <form id="new-password-form" onsubmit="handleSetNewPassword(event)">
+          <div class="form-group" style="margin-bottom:20px;">
+            <label style="font-size:0.8rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; display:block; text-align:left;">Create New Password</label>
+            <p style="color:#64748b; font-size:0.88rem; line-height:1.5; margin-bottom:16px; text-align:left;">
+              Your identity has been verified. Please enter your new password below.
+            </p>
+            <input type="password" id="reset-new-password" class="form-control" placeholder="Min 8 chars" minlength="8" required style="padding:10px 14px;">
+          </div>
+          <button type="submit" id="btn-new-password-submit" class="login-submit-btn" style="border-radius:8px; padding:12px; font-weight:600; font-size:0.95rem; cursor:pointer;">Set New Password 🚀</button>
+        </form>
+      </div>
+
+      <div id="auth-error-msg" style="color:#ef4444; margin:20px 36px; font-size:14px; display:none; text-align:center;"></div>
+    </div>
+  </div>
   <div class="toast-notification" id="toast"><span class="toast-icon"></span><span class="toast-text"></span></div>
 
   <script src="js/main.js"></script><script src="js/feedback.js"></script>
