@@ -305,8 +305,9 @@ function checkLoginState() {
       const menuHTML = document.createElement('div');
       menuHTML.className = 'user-menu'; // Used for identification
       const isProfilePage = window.location.pathname.includes('profile.html');
-      const profilePic = user.profilePic 
-        ? `<img src="${user.profilePic}" style="width:100%; height:100%; object-fit:cover;">` 
+      const savedPic = localStorage.getItem('lookupp_profile_pic') || user.profilePic;
+      const profilePic = savedPic 
+        ? `<img src="${savedPic}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">` 
         : `<span>${firstName.charAt(0).toUpperCase()}</span>`;
 
       if (isProfilePage) {
