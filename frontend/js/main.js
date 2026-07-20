@@ -284,15 +284,14 @@ function checkLoginState() {
 
       const menuHTML = document.createElement('div');
       menuHTML.className = 'user-menu'; // Used for identification
-      const profilePic = user.profilePic 
-        ? `<img src="${user.profilePic}" style="width:100%; height:100%; object-fit:cover;">` 
-        : `<span>${firstName.charAt(0).toUpperCase()}</span>`;
-
+      
       menuHTML.innerHTML = `
-        <a href="profile.html" class="nav-user-avatar" title="My Profile">${profilePic}</a>
+        <button class="nav-user-avatar" onclick="handleLogout()" title="Logout" style="background:transparent; border:none; color:var(--primary); cursor:pointer; padding:5px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; transition:0.3s;" onmouseover="this.style.background='rgba(227,30,36,0.1)'" onmouseout="this.style.background='transparent'">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
       `;
       if (cta) {
-        cta.insertBefore(menuHTML, cta.firstChild);
+        cta.appendChild(menuHTML);
       } else {
         inner.appendChild(menuHTML);
       }

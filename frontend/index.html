@@ -702,7 +702,9 @@
         btn.disabled = false;
         btn.textContent = 'Login to Portal 🚀';
       } else {
-        window.location.href = 'profile.html';
+        closeLoginModal();
+        checkLoginState();
+        showToast('success', '🎉', 'Logged in successfully!');
       }
     }
 
