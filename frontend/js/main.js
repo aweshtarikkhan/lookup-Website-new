@@ -437,7 +437,7 @@ async function loadDynamicContent() {
                 <div class="icon">${s.icon || '⚙️'}</div>
                 <h3>${s.name}</h3>
                 <p>${s.description || ''}</p>
-                <a href="service-details.html?id=${s.id}" class="card-link">Learn More →</a>
+                <a href="service-details.html?id=${s.slug || s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}" class="card-link">Learn More →</a>
               </div>
             `).join('');
           }
@@ -448,7 +448,7 @@ async function loadDynamicContent() {
               <span class="icon">${s.icon || '⚙️'}</span>
               <h3>${s.name}</h3>
               <p>${s.description || ''}</p>
-              <a href="service-details.html?id=${s.id}" class="learn-more">Get Started →</a>
+              <a href="service-details.html?id=${s.slug || s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}" class="learn-more">Get Started →</a>
             </div>
           `;
           
