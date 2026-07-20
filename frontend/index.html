@@ -412,8 +412,12 @@
         <h2 class="section-title" data-cms="home.testimonials.title">What Our <span>Clients</span> Say</h2>
         <p class="section-subtitle" data-cms="home.testimonials.subtitle">Don't just take our word for it — hear from our satisfied clients</p>
       </div>
-      <div class="testimonial-slider-wrapper">
-        <div class="testimonial-slider reveal" id="tslider"></div>
+      <div class="testimonial-section-container" style="position:relative;">
+        <button class="slider-nav-btn prev" onclick="scrollTestimonials(-1)">←</button>
+        <div class="testimonial-slider-wrapper" style="overflow: hidden; padding: 20px 0; margin: -20px 0;">
+          <div class="testimonial-slider reveal" id="tslider"></div>
+        </div>
+        <button class="slider-nav-btn next" onclick="scrollTestimonials(1)">→</button>
       </div>
     </div>
   </section>

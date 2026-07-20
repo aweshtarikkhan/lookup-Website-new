@@ -104,12 +104,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Testimonial auto-scroll (optional subtle effect)
-  const slider = document.querySelector('.testimonial-slider');
-  if (slider) {
-    let scrollPos = 0;
+  // Testimonial auto-scroll setup
+  const sliderWrapper = document.querySelector('.testimonial-slider-wrapper');
+  if (sliderWrapper) {
+    let autoScroll = setInterval(() => scrollTestimonials(1), 3000);
+    sliderWrapper.addEventListener('mouseenter', () => clearInterval(autoScroll));
+    sliderWrapper.addEventListener('mouseleave', () => {
+      autoScroll = setInterval(() => scrollTestimonials(1), 3000);
+    });
   }
 });
+
+function scrollTestimonials(direction) {
+  const wrapper = document.querySelector('.testimonial-slider-wrapper');
+  if (!wrapper) return;
+  const cardWidth = 350 + 24; // Card width + gap
+  wrapper.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+}
 
 // ============ ACCORDION ANIMATION FUNCTIONS ============
 

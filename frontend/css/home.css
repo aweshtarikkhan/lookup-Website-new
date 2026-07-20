@@ -132,13 +132,14 @@
 @media(max-width:480px) { .work-grid{grid-template-columns:1fr;} }
 
 /* Testimonials */
-.testimonial-slider-wrapper { position: relative; overflow: hidden; display: flex; align-items: center; }
-.testimonial-slider { display:flex; gap:24px; animation: scroll-x 30s linear infinite; width:max-content; }
-.testimonial-slider:hover { animation-play-state: paused; }
+.testimonial-slider-wrapper { position: relative; overflow-x: auto; overflow-y: visible; display: flex; align-items: center; padding: 20px 0; margin: -20px 0; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; }
+.testimonial-slider-wrapper::-webkit-scrollbar { display: none; }
+.testimonial-slider { display:flex; gap:24px; width:max-content; padding: 0 10px; }
 .testimonial-card { width:350px; flex-shrink:0; padding:32px; position:relative; }
-.slider-nav-btn { position: absolute; z-index: 10; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(227,30,36,0.3); }
-.slider-nav-btn.prev { left: -22px; }
-.slider-nav-btn.next { right: -22px; }
+.slider-nav-btn { position: absolute; z-index: 10; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(227,30,36,0.3); transition: background 0.3s, transform 0.3s; }
+.slider-nav-btn:hover { background: #b9151c; transform: translateY(-50%) scale(1.1); }
+.slider-nav-btn.prev { left: -20px; }
+.slider-nav-btn.next { right: -20px; }
 .testimonial-card .quote { font-size:3rem; color:var(--primary); opacity:0.3; line-height:1; margin-bottom:12px; }
 .testimonial-card p { color:var(--gray-300); font-size:0.95rem; font-style:italic; margin-bottom:20px; }
 .testimonial-card .stars { color:#ffd700; font-size:0.9rem; margin-bottom:12px; }
