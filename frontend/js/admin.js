@@ -234,8 +234,8 @@ async function loadUsers() {
       <td>${u.name}</td><td>${u.email}</td>
       <td><span class="status-badge" style="background:#1e293b;">${u.role === 'hidden_admin' ? 'DEVELOPER ACCOUNT' : u.role.replace('_', ' ').toUpperCase()}</span></td>
       <td>
-        <button class="action-btn" onclick="editUser(${u.id})">✏️</button>
-        <button class="action-btn delete" onclick="deleteItem('users',${u.id})">🗑️</button>
+        <button class="action-btn" onclick="editUser('${u.id}')">✏️</button>
+        <button class="action-btn delete" onclick="deleteItem('users','${u.id}')">🗑️</button>
       </td>
     </tr>`).join('');
   } catch (err) {
