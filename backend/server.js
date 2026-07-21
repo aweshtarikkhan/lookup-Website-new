@@ -80,8 +80,9 @@ async function authMiddleware(req, res, next) {
       
       if (!dbUser) {
         const name = supaUser.user_metadata?.full_name || supaUser.email.split('@')[0];
-        const result = await db.run(`INSERT INTO users (name, email, role, password) VALUES (?, ?, 'user', '')`, [name, supaUser.email]);
-        dbUser = await db.get(`SELECT * FROM users WHERE id = ?`, [result.lastID]);
+        const newId = Date.now().toString() + '.' + Math.floor(Math.random() * 1000000);
+        await db.run(`INSERT INTO users (id, name, email, role, password) VALUES (?, ?, ?, 'user', '')`, [newId, name, supaUser.email]);
+        dbUser = await db.get(`SELECT * FROM users WHERE id = ?`, [newId]);
       }
       
       req.user = dbUser;
@@ -139,11 +140,20 @@ const createCrudEndpoints = (app, route, table) => {
   app.post(route, async (req, res) => {
     try {
       const db = getDB();
-      const keys = Object.keys(req.body);
-      const values = Object.values(req.body);
+      const payload = { ...req.body };
+      
+      // Explicitly generate ID for users table
+      if (table === 'users' && !payload.id) {
+        payload.id = Date.now().toString() + '.' + Math.floor(Math.random() * 1000000);
+      }
+      
+      const keys = Object.keys(payload);
+      const values = Object.values(payload);
       const placeholders = keys.map(() => '?').join(',');
       const result = await db.run(`INSERT INTO ${table} (${keys.join(',')}) VALUES (${placeholders})`, values);
-      const data = await db.get(`SELECT * FROM ${table} WHERE id = ?`, [result.lastID]);
+      
+      const insertedId = payload.id ? payload.id : result.lastID;
+      const data = await db.get(`SELECT * FROM ${table} WHERE id = ?`, [insertedId]);
       res.json({ success: true, data });
     } catch (err) {
       res.status(500).json({ error: err.message });

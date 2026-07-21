@@ -687,6 +687,11 @@ async function handleModalSubmit(e) {
       let formData = Object.fromEntries(new FormData(form));
       if (formData.rating) formData.rating = parseInt(formData.rating);
       
+      // Don't overwrite password with empty string if left blank
+      if (editingType === 'user' && !formData.password) {
+        delete formData.password;
+      }
+      
       // Handle Quotation specific mapping to match DB schema
       if (editingType === 'quotation') {
         const payload = {
@@ -725,10 +730,26 @@ async function handleModalSubmit(e) {
     }
     
     const contentType = response.headers.get("content-type");
-    if (!response.ok || !contentType || !contentType.includes("application/json")) {
-      const text = await response.text();
-      console.error("API Error Response:", text);
-      throw new Error(`Server returned HTML instead of data. (Status: ${response.status}). If you are using PM2/Nodemon, disable --watch.`);
+    
+    if (!response.ok) {
+      let errorMsg = `Server error (${response.status})`;
+      if (contentType && contentType.includes("application/json")) {
+        const errData = await response.json();
+        errorMsg = errData.error || errorMsg;
+      } else {
+        const text = await response.text();
+        console.error("API Error Response:", text);
+        if (text.includes('<html')) {
+          errorMsg = `Server returned HTML instead of data. (Status: ${response.status}). If using PM2, disable --watch.`;
+        } else {
+          errorMsg = text;
+        }
+      }
+      throw new Error(errorMsg);
+    }
+    
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Invalid response format from server.");
     }
     
     resultData = await response.json();
