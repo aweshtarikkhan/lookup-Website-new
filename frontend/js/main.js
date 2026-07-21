@@ -270,10 +270,21 @@ function handleSignup(e) {
   }
 }
 
-function handleLogout() {
+async function handleLogout() {
+  if (typeof supabaseClient !== 'undefined') {
+    await supabaseClient.auth.signOut();
+  }
+  localStorage.removeItem('adminToken');
+  localStorage.removeItem('adminUser');
   localStorage.removeItem('lookupp_user');
+  Object.keys(localStorage).forEach(key => { if(key.startsWith('sb-')) localStorage.removeItem(key); });
+  
   showToast('success', '👋', 'Logged out successfully.');
   checkLoginState();
+  
+  if (window.location.pathname.includes('profile.html')) {
+    window.location.href = '/';
+  }
 }
 
 function checkLoginState() {
