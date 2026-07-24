@@ -180,7 +180,23 @@
 
         <!-- Users -->
         <div class="section" id="section-users">
-          <div class="section-toolbar"><h3>Manage Users & Roles</h3><button class="btn-add" onclick="openModal('user')">+ Add User</button></div>
+          <div class="section-toolbar">
+            <h3>Manage Users & Roles</h3>
+            <button class="btn-add" onclick="openModal('user')">+ Add User</button>
+          </div>
+          <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <input type="text" id="user-search" class="form-control" placeholder="Search by name, email, or phone..." oninput="filterUsers()" style="flex: 1; min-width: 200px; padding: 10px; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;">
+            <select id="user-role-filter" class="form-control" onchange="filterUsers()" style="padding: 10px; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; width: 160px;">
+              <option value="">All Roles</option>
+              <option value="SUPER_ADMIN">Super Admin</option>
+              <option value="ADMIN">Admin</option>
+              <option value="USER">User</option>
+            </select>
+            <select id="user-sort" class="form-control" onchange="filterUsers()" style="padding: 10px; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; width: 170px;">
+              <option value="newest">Newest to Oldest</option>
+              <option value="oldest">Oldest to Newest</option>
+            </select>
+          </div>
           <div class="table-wrap"><table id="users-table"><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Brand</th><th>Goal</th><th>Role</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
         </div>
 

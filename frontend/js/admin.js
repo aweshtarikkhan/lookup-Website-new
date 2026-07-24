@@ -225,26 +225,54 @@ async function loadTeam() {
   </tr>`).join('');
 }
 
+let allUsersData = [];
+
 async function loadUsers() {
   try {
     const data = await fetch('/api/users').then(r => r.json());
     if (data.error) throw new Error(data.error);
-    const tbody = document.querySelector('#users-table tbody');
-    tbody.innerHTML = data.map(u => {
-      const goalFormatted = u.primary_goal ? u.primary_goal.replace('_', ' ').toUpperCase() : '-';
-      return `<tr>
-        <td>${u.name}</td><td>${u.email}</td>
-        <td>${u.phone || '-'}</td><td>${u.brand_domain || '-'}</td><td><span style="font-size:0.8rem;color:#94a3b8;">${goalFormatted}</span></td>
-        <td><span class="status-badge" style="background:#1e293b;">${u.role === 'hidden_admin' ? 'DEVELOPER ACCOUNT' : u.role.replace('_', ' ').toUpperCase()}</span></td>
-        <td>
-          <button class="action-btn" onclick="editUser('${u.id}')">✏️</button>
-          <button class="action-btn delete" onclick="deleteItem('users','${u.id}')">🗑️</button>
-        </td>
-      </tr>`;
-    }).join('');
+    allUsersData = data;
+    filterUsers();
   } catch (err) {
     document.querySelector('#users-table tbody').innerHTML = '<tr><td colspan="7" class="empty-state">Access Denied</td></tr>';
   }
+}
+
+function filterUsers() {
+  const searchQ = (document.getElementById('user-search')?.value || '').toLowerCase();
+  const roleQ = (document.getElementById('user-role-filter')?.value || '').toLowerCase();
+  const sortQ = document.getElementById('user-sort')?.value || 'newest';
+  
+  let filtered = allUsersData.filter(u => {
+    const nameMatch = (u.name || '').toLowerCase().includes(searchQ);
+    const emailMatch = (u.email || '').toLowerCase().includes(searchQ);
+    const phoneMatch = (u.phone || '').toLowerCase().includes(searchQ);
+    const roleMatch = roleQ ? (u.role || '').toLowerCase() === roleQ : true;
+    return (nameMatch || emailMatch || phoneMatch) && roleMatch;
+  });
+  
+  if (sortQ === 'oldest') {
+    filtered.reverse();
+  }
+  
+  const tbody = document.querySelector('#users-table tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No users found.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = filtered.map(u => {
+    const goalFormatted = u.primary_goal ? u.primary_goal.replace('_', ' ').toUpperCase() : '-';
+    return `<tr>
+      <td>${u.name}</td><td>${u.email}</td>
+      <td>${u.phone || '-'}</td><td>${u.brand_domain || '-'}</td><td><span style="font-size:0.8rem;color:#94a3b8;">${goalFormatted}</span></td>
+      <td><span class="status-badge" style="background:#1e293b;">${u.role === 'hidden_admin' ? 'DEVELOPER ACCOUNT' : u.role.replace('_', ' ').toUpperCase()}</span></td>
+      <td>
+        <button class="action-btn" onclick="editUser('${u.id}')">✏️</button>
+        <button class="action-btn delete" onclick="deleteItem('users','${u.id}')">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 async function loadTestimonials() {
