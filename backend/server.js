@@ -6,7 +6,7 @@ const { createClient } = require('@supabase/supabase-js');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 // Polyfill WebSocket for Node.js < 22 (needed for @supabase/realtime-js)
 if (typeof WebSocket === 'undefined') {
