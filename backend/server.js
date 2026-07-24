@@ -81,7 +81,16 @@ async function authMiddleware(req, res, next) {
       if (!dbUser) {
         const name = supaUser.user_metadata?.full_name || supaUser.email.split('@')[0];
         const newId = Date.now().toString() + '.' + Math.floor(Math.random() * 1000000);
-        await db.run(`INSERT INTO users (id, name, email, role, password) VALUES (?, ?, ?, 'user', '')`, [newId, name, supaUser.email]);
+        
+        // Extract optional metadata fields
+        const phone = supaUser.user_metadata?.phone || '';
+        const brand = supaUser.user_metadata?.brand_domain || '';
+        const goal = supaUser.user_metadata?.primary_goal || '';
+        
+        await db.run(
+          `INSERT INTO users (id, name, email, role, password, phone, brand_domain, primary_goal) VALUES (?, ?, ?, 'user', '', ?, ?, ?)`,
+          [newId, name, supaUser.email, phone, brand, goal]
+        );
         dbUser = await db.get(`SELECT * FROM users WHERE id = ?`, [newId]);
       }
       

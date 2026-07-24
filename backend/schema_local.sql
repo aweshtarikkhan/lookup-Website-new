@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
   password TEXT,
   role TEXT DEFAULT 'user',
   phone TEXT,
+  brand_domain TEXT,
+  primary_goal TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

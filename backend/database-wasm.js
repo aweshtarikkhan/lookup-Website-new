@@ -139,6 +139,11 @@ async function initDB() {
   try {
     sqlDb.run(`INSERT OR IGNORE INTO key_value_store (id, data) VALUES ('settings', '{}')`);
     sqlDb.run(`INSERT OR IGNORE INTO key_value_store (id, data) VALUES ('content', '{}')`);
+    
+    // Migrations for new columns in users table
+    try { sqlDb.run(`ALTER TABLE users ADD COLUMN brand_domain TEXT`); } catch(e) {}
+    try { sqlDb.run(`ALTER TABLE users ADD COLUMN primary_goal TEXT`); } catch(e) {}
+    
     dbInstance._save();
   } catch(e) {}
 
