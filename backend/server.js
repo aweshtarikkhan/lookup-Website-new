@@ -29,10 +29,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../frontend')));
-app.use(['/uploads', '/api/uploads'], express.static(path.join(__dirname, '../frontend/uploads')));
+app.use(['/uploads', '/api/uploads'], express.static(path.join(__dirname, '../uploads')));
 
 // Setup uploads directory
-const uploadsDir = path.join(__dirname, '../frontend/uploads');
+const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
 // Multer config for disk storage
