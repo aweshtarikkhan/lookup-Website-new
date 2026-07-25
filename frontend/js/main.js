@@ -536,6 +536,29 @@ async function applyCMSContent() {
         }
       });
       
+      // Render dynamic legal content
+      const renderLegalContent = (containerId, pageKey) => {
+        const container = document.getElementById(containerId);
+        if (container && websiteContent[pageKey]) {
+          let html = '';
+          for (const [key, section] of Object.entries(websiteContent[pageKey])) {
+             if (key !== 'hero') {
+               if(section.title) html += `<h2>${section.title}</h2>`;
+               if(section.description) html += `<p>${section.description.replace(/\\n/g, '<br>')}</p>`;
+             }
+          }
+          if (html) container.innerHTML = html;
+          
+          if (websiteContent[pageKey].hero) {
+             const heroTitle = document.querySelector('.page-banner h1');
+             if (heroTitle && websiteContent[pageKey].hero.title) heroTitle.innerHTML = websiteContent[pageKey].hero.title;
+          }
+        }
+      };
+      
+      renderLegalContent('privacy-content', 'privacy');
+      renderLegalContent('terms-content', 'terms');
+      
       // Load Trusted Brands
       const clientsRes = await fetch('/api/clients?t=' + new Date().getTime());
       if (clientsRes.ok) {

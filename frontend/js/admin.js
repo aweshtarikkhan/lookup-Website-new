@@ -294,7 +294,7 @@ async function loadSettings() {
     {key:'businessHours',label:'Business Hours'},{key:'googleMap',label:'Google Map URL'},
     {key:'facebook',label:'Facebook URL'},{key:'instagram',label:'Instagram URL'},
     {key:'linkedin',label:'LinkedIn URL'},{key:'youtube',label:'YouTube URL'},
-    {key:'threads',label:'Threads URL'}
+    {key:'threads',label:'Threads URL'},{key:'copyrightText',label:'Copyright Text',full:true}
   ];
   let formHtml = fields.map(f => `<div class="form-group ${f.full?'full':''}"><label>${f.label}</label><input type="text" class="form-control" name="${f.key}" value="${data[f.key]||''}"></div>`).join('');
   formHtml += `
