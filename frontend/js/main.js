@@ -332,11 +332,7 @@ function checkLoginState() {
           <a href="profile.html" class="nav-user-avatar" title="My Profile">${profilePic}</a>
         `;
       }
-      if (cta) {
-        cta.insertBefore(menuHTML, cta.firstChild);
-      } else {
-        inner.appendChild(menuHTML);
-      }
+      inner.appendChild(menuHTML);
     } else {
       inner.classList.remove('logged-in');
       if (loginBtn) loginBtn.style.display = '';
