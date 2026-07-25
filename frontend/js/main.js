@@ -576,6 +576,16 @@ async function applySettings() {
           el.style.display = 'none'; // hide social icon if no link provided
         }
       });
+      
+      const teamSection = document.getElementById('team-section');
+      if (teamSection && !settings.showTeamSection) {
+        teamSection.style.display = 'none';
+      }
+      
+      const mapSection = document.getElementById('map-section');
+      if (mapSection && !settings.showGoogleMap) {
+        mapSection.style.display = 'none';
+      }
     }
   } catch(e) { console.error('Error applying settings:', e); }
 }
@@ -583,4 +593,5 @@ async function applySettings() {
 document.addEventListener('DOMContentLoaded', () => {
   loadDynamicContent();
   applyCMSContent();
+  applySettings();
 });

@@ -296,10 +296,26 @@ async function loadSettings() {
     {key:'linkedin',label:'LinkedIn URL'},{key:'youtube',label:'YouTube URL'},
     {key:'threads',label:'Threads URL'}
   ];
-  form.innerHTML = fields.map(f => `<div class="form-group ${f.full?'full':''}"><label>${f.label}</label><input type="text" class="form-control" name="${f.key}" value="${data[f.key]||''}"></div>`).join('') + '<button type="submit" class="btn-submit full">Save Settings</button>';
+  let formHtml = fields.map(f => `<div class="form-group ${f.full?'full':''}"><label>${f.label}</label><input type="text" class="form-control" name="${f.key}" value="${data[f.key]||''}"></div>`).join('');
+  formHtml += `
+    <div class="form-group full" style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+      <input type="checkbox" id="setting-team-section" style="width:18px;height:18px;" ${data.showTeamSection ? 'checked' : ''}>
+      <label for="setting-team-section" style="margin:0;">Show Team Section on About Page</label>
+    </div>
+    <div class="form-group full" style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+      <input type="checkbox" id="setting-google-map" style="width:18px;height:18px;" ${data.showGoogleMap ? 'checked' : ''}>
+      <label for="setting-google-map" style="margin:0;">Show Google Map on Contact Page</label>
+    </div>
+  `;
+  formHtml += '<button type="submit" class="btn-submit full">Save Settings</button>';
+  form.innerHTML = formHtml;
+  
   form.onsubmit = async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(form));
+    formData.showTeamSection = document.getElementById('setting-team-section').checked;
+    formData.showGoogleMap = document.getElementById('setting-google-map').checked;
+    
     // Preserve trustedBrands if it exists in data
     if (data.trustedBrands) formData.trustedBrands = data.trustedBrands;
     await fetch('/api/settings', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(formData)});
