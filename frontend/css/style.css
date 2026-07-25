@@ -531,3 +531,83 @@ select.form-control { cursor:pointer; appearance:none; background-image:url("dat
   .login-tab-content { padding:24px; }
   .social-login-btns { flex-direction:column; }
 }
+
+/* --- Unified CTA Section --- */
+.cta-section-unified {
+  background: #fdf5f6; /* Light pale red/pink background */
+  border-radius: 30px;
+  padding: 80px 40px;
+  text-align: center;
+  margin: 60px 0;
+}
+.cta-section-unified h2 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 20px;
+}
+.cta-section-unified p {
+  color: #555;
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+.cta-section-unified .cta-btns {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-cta {
+  background: #e31e24 !important;
+  color: #fff !important;
+  border-radius: 50px !important;
+  padding: 16px 36px !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  box-shadow: 0 10px 25px rgba(227, 30, 36, 0.4) !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  border: 2px solid #e31e24 !important;
+}
+.btn-cta:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 15px 35px rgba(227, 30, 36, 0.5) !important;
+  background: #c81a20 !important;
+  border-color: #c81a20 !important;
+  color: #fff !important;
+}
+
+.btn-secondary-cta {
+  background: #ffffff !important;
+  color: #e31e24 !important;
+  border: 2px solid #e31e24 !important;
+  border-radius: 50px !important;
+  padding: 16px 36px !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  box-shadow: 0 10px 25px rgba(227, 30, 36, 0.1) !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.btn-secondary-cta:hover {
+  background: #e31e24 !important;
+  color: #ffffff !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 15px 35px rgba(227, 30, 36, 0.3) !important;
+}
+
+/* Fix SVG colors on hover */
+.btn-secondary-cta svg {
+  stroke: #e31e24;
+  transition: stroke 0.3s ease;
+}
+.btn-secondary-cta:hover svg {
+  stroke: #ffffff;
+}
