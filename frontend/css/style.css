@@ -182,10 +182,16 @@ section { padding: 100px 0; position: relative; }
   .nav-toggle {
     display: flex;
     z-index: 1006;
+    order: 3; /* Hamburger menu on the far right */
+    margin-left: 12px;
   }
   
   .user-menu {
-    right: 45px; /* Shift to the left of hamburger menu */
+    position: static; /* Remove absolute positioning */
+    right: auto;
+    height: auto;
+    order: 2; /* Profile to the left of hamburger menu */
+    margin-left: auto; /* Push them to the right side together */
   }
 
   .nav-links {
