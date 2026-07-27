@@ -228,24 +228,33 @@ body.menu-open .navbar {
   }
 
   .nav-cta {
-    position: fixed;
-    bottom: 0;
+    position: fixed !important;
+    bottom: 0 !important;
     right: -300px;
     width: 300px;
-    height: auto;
+    height: auto !important;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    flex-direction: column;
+    flex-direction: column !important; /* Override desktop row-reverse */
     padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 10px));
     gap: 12px;
     transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     border-left: 1px solid rgba(0, 0, 0, 0.06);
     z-index: 1001;
-    /* Ensure it never moves from the bottom */
     top: auto !important;
     transform: none !important;
+    margin-right: 0 !important; /* Override logged-in margin */
+  }
+  
+  /* Ensure both buttons are visible inside mobile drawer */
+  .nav-cta .btn-login,
+  .nav-cta .btn-primary {
+    display: inline-flex !important;
+    width: 100%;
+    justify-content: center;
+    order: unset;
   }
 
   .nav-links.open, .nav-cta.open {
