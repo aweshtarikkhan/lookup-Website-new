@@ -183,7 +183,9 @@ body.menu-open {
 }
 body.menu-open .navbar {
   background: rgba(255,255,255,0.97) !important;
-  backdrop-filter: blur(20px) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transform: none !important;
 }
 
 /* Mobile Nav Redesign */
