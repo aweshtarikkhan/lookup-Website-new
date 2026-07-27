@@ -630,8 +630,7 @@ async function applyCMSContent() {
         }
       };
       
-      renderLegalContent('privacy-content', 'privacy');
-      renderLegalContent('terms-content', 'terms');
+      // Removed dynamic legal content loading to use hardcoded fast HTML
       
       // Load Trusted Brands
       const clientsRes = await fetch('/api/clients?t=' + new Date().getTime());
