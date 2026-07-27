@@ -380,36 +380,36 @@ async function loadDynamicContent() {
         <div class="glass-card testimonial-card">
           <div class="quote">"</div>
           <div class="stars">★★★★★</div>
-          <p>LookUPp transformed our online presence completely. Their digital marketing strategies doubled our leads in just 3 months!</p>
+          <p>LookUPp transformed our online presence completely. Our leads increased by 400% within 3 months!</p>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">S</div>
+            <div class="testimonial-avatar">R</div>
             <div class="testimonial-info">
-              <div class="name">Sarah Johnson</div>
-              <div class="company">CEO, TechFlow</div>
+              <div class="name">Rajesh Kumar</div>
+              <div class="company">TechStart Solutions</div>
             </div>
           </div>
         </div>
         <div class="glass-card testimonial-card">
           <div class="quote">"</div>
           <div class="stars">★★★★★</div>
-          <p>The web development team is top-notch. They delivered a stunning, lightning-fast e-commerce platform that our customers love.</p>
+          <p>The team's creativity and dedication is unmatched. They delivered beyond our expectations!</p>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">M</div>
+            <div class="testimonial-avatar">P</div>
             <div class="testimonial-info">
-              <div class="name">Michael Chen</div>
-              <div class="company">Founder, StyleHub</div>
+              <div class="name">Priya Sharma</div>
+              <div class="company">Fashion Boutique</div>
             </div>
           </div>
         </div>
         <div class="glass-card testimonial-card">
           <div class="quote">"</div>
           <div class="stars">★★★★★</div>
-          <p>Outstanding branding work! They captured our company's essence perfectly and created an identity that stands out in the market.</p>
+          <p>Professional, timely, and result-oriented. Best digital agency we've worked with!</p>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">E</div>
+            <div class="testimonial-avatar">A</div>
             <div class="testimonial-info">
-              <div class="name">Emma Davis</div>
-              <div class="company">Director, InnovateCo</div>
+              <div class="name">Amit Patel</div>
+              <div class="company">HealthCare Plus</div>
             </div>
           </div>
         </div>
