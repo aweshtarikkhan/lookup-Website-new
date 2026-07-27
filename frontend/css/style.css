@@ -417,21 +417,21 @@ body.menu-open .navbar {
 .footer-col a:hover { color:var(--primary); padding-left:8px; }
 .footer-contact-item { display:flex; align-items:flex-start; gap:12px; margin-bottom:16px; color:var(--gray-400); font-size:0.9rem; }
 .footer-contact-item svg { width:18px; height:18px; flex-shrink:0; margin-top:3px; color:var(--primary); }
-.footer-social { display:flex; gap:10px; margin-top:20px; align-items:center; }
-.footer-social a {
+.footer-social, .contact-social { display:flex; gap:10px; margin-top:20px; align-items:center; }
+.footer-social a, .contact-social a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
 }
-.footer-social a img, .footer-social a svg {
+.footer-social a img, .footer-social a svg, .contact-social a img, .contact-social a svg {
   width: 28px;
   height: 28px;
   object-fit: contain;
   filter: grayscale(100%) opacity(0.7);
   transition: filter 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.footer-social a:hover img, .footer-social a:hover svg {
+.footer-social a:hover img, .footer-social a:hover svg, .contact-social a:hover img, .contact-social a:hover svg {
   filter: grayscale(0%) opacity(1);
   transform: scale(1.15);
 }
