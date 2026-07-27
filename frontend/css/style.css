@@ -173,6 +173,10 @@ section { padding: 100px 0; position: relative; }
 .nav-toggle.active span:nth-child(2) { opacity:0; }
 .nav-toggle.active span:nth-child(3) { transform:rotate(-45deg) translateY(-7px); }
 
+body.menu-open {
+  overflow: hidden;
+}
+
 /* Mobile Nav Redesign */
 @media(max-width:1024px) {
   .navbar {

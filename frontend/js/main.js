@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentScrollY = window.scrollY;
     
     // Auto-hide navbar on scroll down, show on scroll up
-    if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+    if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold && !document.body.classList.contains('menu-open')) {
       navbar.classList.add('nav-hidden');
     } else {
       navbar.classList.remove('nav-hidden');
@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
       navToggle.classList.toggle('active');
       navLinks.classList.toggle('open');
       if (navCta) navCta.classList.toggle('open');
+      document.body.classList.toggle('menu-open');
     });
     // Close on link click
     document.querySelectorAll('.nav-links a:not(.dropdown-toggle)').forEach(link => {
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navToggle.classList.remove('active');
         navLinks.classList.remove('open');
         if (navCta) navCta.classList.remove('open');
+        document.body.classList.remove('menu-open');
       });
     });
   }
@@ -357,26 +359,79 @@ async function loadDynamicContent() {
     // 1. Testimonials
     const tContainer = document.querySelector('.testimonial-slider');
     if (tContainer) {
-      const res = await fetch('/api/testimonials');
-      if (res.ok) {
-        const testimonials = await res.json();
-        if (testimonials && testimonials.length > 0) {
-            const tHtml = testimonials.map(t => `
-              <div class="glass-card testimonial-card">
-                <div class="quote">"</div>
-                <div class="stars">${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}</div>
-                <p>${t.feedback}</p>
-                <div class="testimonial-author">
-                  <div class="testimonial-avatar">${t.client_name.charAt(0).toUpperCase()}</div>
-                  <div class="testimonial-info">
-                    <div class="name">${t.client_name}</div>
-                    <div class="company">${t.company || 'Client'}</div>
+      const defaultHtml = `
+        <div class="glass-card testimonial-card">
+          <div class="quote">"</div>
+          <div class="stars">★★★★★</div>
+          <p>LookUPp transformed our online presence completely. Their digital marketing strategies doubled our leads in just 3 months!</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div class="testimonial-info">
+              <div class="name">Sarah Johnson</div>
+              <div class="company">CEO, TechFlow</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card testimonial-card">
+          <div class="quote">"</div>
+          <div class="stars">★★★★★</div>
+          <p>The web development team is top-notch. They delivered a stunning, lightning-fast e-commerce platform that our customers love.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">M</div>
+            <div class="testimonial-info">
+              <div class="name">Michael Chen</div>
+              <div class="company">Founder, StyleHub</div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-card testimonial-card">
+          <div class="quote">"</div>
+          <div class="stars">★★★★★</div>
+          <p>Outstanding branding work! They captured our company's essence perfectly and created an identity that stands out in the market.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">E</div>
+            <div class="testimonial-info">
+              <div class="name">Emma Davis</div>
+              <div class="company">Director, InnovateCo</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      try {
+        const res = await fetch('/api/testimonials');
+        if (res.ok) {
+          const testimonials = await res.json();
+          if (testimonials && testimonials.length > 0) {
+              const tHtml = testimonials.map(t => {
+                const name = t.client_name || 'Valued Client';
+                const company = t.company || 'Client';
+                const feedback = t.feedback || '';
+                const rating = t.rating || 5;
+                const initial = name.charAt(0).toUpperCase();
+                return `
+                <div class="glass-card testimonial-card">
+                  <div class="quote">"</div>
+                  <div class="stars">${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}</div>
+                  <p>${feedback}</p>
+                  <div class="testimonial-author">
+                    <div class="testimonial-avatar">${initial}</div>
+                    <div class="testimonial-info">
+                      <div class="name">${name}</div>
+                      <div class="company">${company}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            `).join('');
-            tContainer.innerHTML = tHtml + tHtml;
+              `}).join('');
+              tContainer.innerHTML = tHtml + tHtml;
+          } else {
+              tContainer.innerHTML = defaultHtml + defaultHtml;
+          }
+        } else {
+          tContainer.innerHTML = defaultHtml + defaultHtml;
         }
+      } catch (err) {
+        tContainer.innerHTML = defaultHtml + defaultHtml;
       }
     }
 
