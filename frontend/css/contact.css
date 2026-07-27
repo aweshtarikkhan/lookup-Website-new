@@ -6,9 +6,7 @@
 .contact-info-card h3 { font-size:1rem; margin-bottom:4px; }
 .contact-info-card p { color:var(--gray-400); font-size:0.9rem; }
 .contact-info-card a { color:var(--primary); }
-.contact-social { display:flex; gap:12px; margin-top:24px; }
-.contact-social a { width:44px; height:44px; border-radius:50%; background:var(--glass-bg); border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center; color:var(--gray-400); font-size:1.1rem; transition:var(--transition); }
-.contact-social a:hover { background:var(--primary); border-color:var(--primary); color:var(--white); transform:translateY(-3px); }
+.contact-social { display:flex; gap:10px; margin-top:24px; align-items:center; }
 .contact-form-wrap { padding:40px; }
 .contact-form-wrap h2 { margin-bottom:8px; }
 .contact-form-wrap > p { color:var(--gray-400); margin-bottom:28px; }
