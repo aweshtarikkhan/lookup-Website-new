@@ -415,8 +415,17 @@ async function loadDynamicContent() {
         </div>
       `;
 
+      // Show default immediately so it's never blank
+      tContainer.innerHTML = defaultHtml + defaultHtml;
+
       try {
-        const res = await fetch('/api/testimonials');
+        // Add a 5-second timeout for the fetch to avoid hanging forever
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const res = await fetch('/api/testimonials', { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
         if (res.ok) {
           const testimonials = await res.json();
           if (testimonials && testimonials.length > 0) {
@@ -441,14 +450,11 @@ async function loadDynamicContent() {
                 </div>
               `}).join('');
               tContainer.innerHTML = tHtml + tHtml;
-          } else {
-              tContainer.innerHTML = defaultHtml + defaultHtml;
           }
-        } else {
-          tContainer.innerHTML = defaultHtml + defaultHtml;
         }
       } catch (err) {
-        tContainer.innerHTML = defaultHtml + defaultHtml;
+        // If it fails or times out, it will just keep the defaultHtml we already set
+        console.warn('Could not fetch real testimonials, keeping defaults', err);
       }
     }
 
