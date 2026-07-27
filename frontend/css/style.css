@@ -909,3 +909,8 @@ html, body {
   .section-badge { font-size: 0.7rem; padding: 5px 12px; }
   .glass-card { padding: 18px 14px; }
 }
+
+/* Hide hero visual animation/GIF on mobile and tablet */
+@media(max-width: 1024px) {
+  .hero-visual { display: none !important; }
+}
